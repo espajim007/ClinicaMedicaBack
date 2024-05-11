@@ -58,7 +58,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             try
             {   
 
-                    var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}', " +
+                        var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}', " +
                         $"estado ='{editarUsuario.estado}' WHERE id_usuario = {editarUsuario.id_usuario}";
                     var actualizar = db.ExecuteQuery(queryActualizar);
                     return Ok();
@@ -173,7 +173,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
-                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email) VALUES ( 2,'{registro.nombre}', '{registro.contrasenia}', '{registro.email}')";
+                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email,estado) VALUES ( 2,'{registro.nombre}', '{registro.contrasenia}', '{registro.email}',1)";
                     db.ExecuteQuery(queryInsertar);
 
                     // Registro exitoso, devolver un Ok

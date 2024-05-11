@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AnalisisIClinicaMedicaBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d4cb78719ff73a5c9006665159b96d3c1435772")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7201bd39ff68ae5f67518a0a1d9ed4abf0178ad6")]
 [assembly: System.Reflection.AssemblyProductAttribute("AnalisisIClinicaMedicaBack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AnalisisIClinicaMedicaBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
