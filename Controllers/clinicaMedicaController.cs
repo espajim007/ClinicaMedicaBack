@@ -30,15 +30,14 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                var query = @"SELECT a.id_usuario, b.nombre AS rol, a.nombre, a.email, a.estado
-                             FROM usuario a
-                            INNER JOIN rol b ON a.id_rol = b.id_rol
-                            ORDER BY a.id_usuario";
+                var query = @"SELECT id_usuario, id_rol , nombre, email, estado
+                             FROM usuario 
+                            ORDER BY id_usuario";
                 var resultado = db.ExecuteQuery(query);
                 var usuarios = resultado.AsEnumerable().Select(row => new usuario
                 {
                     id_usuario = Convert.ToInt32(row["id_usuario"]),
-                    rol = row["rol"].ToString(),
+                    id_rol = Convert.ToInt32(row["id_rol"]),
                     nombre = row["nombre"].ToString(),
                     email = row["email"].ToString(),
                     estado = Convert.ToBoolean(row["estado"])
@@ -57,7 +56,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         public IActionResult editarUsuario([FromBody] registro_usuario editarUsuario)
         {
             try
-            {
+            {   
 
                     var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}', " +
                         $"estado ='{editarUsuario.estado}' WHERE id_usuario = {editarUsuario.id_usuario}";
@@ -86,7 +85,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
                     var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email, estado) VALUES ( '{nuevoUsuario.id_rol}','{nuevoUsuario.nombre}', " +
-                                                                                                            $"'{nuevoUsuario.contrasenia}', '{nuevoUsuario.email}', 0)";
+                                                                                                            $"'{nuevoUsuario.contrasenia}', '{nuevoUsuario.email}', 1)";
                     db.ExecuteQuery(queryInsertar);
                     return Ok();
                 }
@@ -147,7 +146,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 var usuario = new usuario
                 {
                     id_usuario = Convert.ToInt32(resultado.Rows[0]["id_usuario"]),
-                    rol = resultado.Rows[0]["id_rol"].ToString(),
+                    id_rol = Convert.ToInt32(resultado.Rows[0]["id_rol"]),
                     email = resultado.Rows[0]["email"].ToString(),
                     nombre = resultado.Rows[0]["nombre"].ToString(),
                     estado = Convert.ToBoolean(resultado.Rows[0]["estado"])
