@@ -35,3 +35,4 @@ D:\Documents\PrograProyects\LoginAnalisis\AnalisisIClinicaMedicaBack\obj\Debug\n
 D:\Documents\PrograProyects\LoginAnalisis\AnalisisIClinicaMedicaBack\obj\Debug\net6.0\AnalisisIClinicaMedicaBack.pdb
 D:\Documents\PrograProyects\LoginAnalisis\AnalisisIClinicaMedicaBack\obj\Debug\net6.0\AnalisisIClinicaMedicaBack.genruntimeconfig.cache
 D:\Documents\PrograProyects\LoginAnalisis\AnalisisIClinicaMedicaBack\obj\Debug\net6.0\ref\AnalisisIClinicaMedicaBack.dll
+D:\Documents\PrograProyects\LoginAnalisis\AnalisisIClinicaMedicaBack\obj\Debug\net6.0\AnalisisIClinicaMedicaBack.sourcelink.json
