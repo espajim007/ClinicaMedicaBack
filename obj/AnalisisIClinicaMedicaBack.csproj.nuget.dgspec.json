@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Documents\\PrograProyects\\LoginAnalisis\\AnalisisIClinicaMedicaBack\\AnalisisIClinicaMedicaBack.csproj": {}
+    "C:\\Users\\pared\\Documents\\Clinica\\Back\\AnalisisIClinicaMedicaBack.csproj": {}
   },
   "projects": {
-    "D:\\Documents\\PrograProyects\\LoginAnalisis\\AnalisisIClinicaMedicaBack\\AnalisisIClinicaMedicaBack.csproj": {
+    "C:\\Users\\pared\\Documents\\Clinica\\Back\\AnalisisIClinicaMedicaBack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Documents\\PrograProyects\\LoginAnalisis\\AnalisisIClinicaMedicaBack\\AnalisisIClinicaMedicaBack.csproj",
+        "projectUniqueName": "C:\\Users\\pared\\Documents\\Clinica\\Back\\AnalisisIClinicaMedicaBack.csproj",
         "projectName": "AnalisisIClinicaMedicaBack",
-        "projectPath": "D:\\Documents\\PrograProyects\\LoginAnalisis\\AnalisisIClinicaMedicaBack\\AnalisisIClinicaMedicaBack.csproj",
-        "packagesPath": "C:\\Users\\josea\\.nuget\\packages\\",
-        "outputPath": "D:\\Documents\\PrograProyects\\LoginAnalisis\\AnalisisIClinicaMedicaBack\\obj\\",
+        "projectPath": "C:\\Users\\pared\\Documents\\Clinica\\Back\\AnalisisIClinicaMedicaBack.csproj",
+        "packagesPath": "C:\\Users\\pared\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\pared\\Documents\\Clinica\\Back\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "D:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\josea\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\pared\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -39,6 +34,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -73,7 +73,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
         }
       }
     }

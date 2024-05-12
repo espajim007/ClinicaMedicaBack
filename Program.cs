@@ -1,3 +1,5 @@
+using AnalisisIClinicaMedicaBack.Controllers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,6 +31,9 @@ app.UseHttpsRedirection();
 app.UseCors("policy");
 app.UseAuthentication();
 app.UseAuthorization();
+
+//var progra = new Progra(builder.Configuration);
+//progra.Existente();
 
 app.MapControllers();
 
