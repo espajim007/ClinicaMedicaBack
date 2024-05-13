@@ -10,6 +10,8 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
+using Microsoft.VisualBasic;
+using System.Collections.Generic;
 
 
 namespace AnalisisIClinicaMedicaBack.Controllers
@@ -50,31 +52,25 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }*/
 
+        private static readonly byte[] Salt = new byte[] { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0x10 }; // Salt fijo
+
         public string EncriptarContraseña(string contraseña)
         {
-            // Generar un salt aleatorio
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-
-            // Concatenar la contraseña con el salt
-            byte[] contraseniaConSalt = Encoding.UTF8.GetBytes(contraseña).Concat(salt).ToArray();
+            // Concatenar la contraseña con el salt fijo
+            byte[] contraseniaConSalt = Encoding.UTF8.GetBytes(contraseña).Concat(Salt).ToArray();
 
             // Calcular el hash utilizando SHA-256
             using (var sha256 = SHA256.Create())
             {
                 byte[] hashContraseña = sha256.ComputeHash(contraseniaConSalt);
 
-                // Construir la cadena encriptada concatenando el salt y el hash
-                byte[] hashConcatenado = new byte[salt.Length + hashContraseña.Length];
-                Array.Copy(salt, 0, hashConcatenado, 0, salt.Length);
-                Array.Copy(hashContraseña, 0, hashConcatenado, salt.Length, hashContraseña.Length);
-
-                return Convert.ToBase64String(hashConcatenado);
+                return Convert.ToBase64String(hashContraseña);
             }
         }
 
-
     }
+
+
 
     [Route("api/[controller]")]
     [ApiController]
@@ -107,7 +103,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     id_rol = Convert.ToInt32(row["id_rol"]),
                     nombre = row["nombre"].ToString(),
                     email = row["email"].ToString(),
-                    contrasenia = progra.EncriptarContraseña(row["contrasenia"].ToString()), // Aquí obtienes la contraseña
+                    contrasenia = row["contrasenia"].ToString(), // Aquí obtienes la contraseña
                     estado = Convert.ToBoolean(row["estado"])
                 }).ToList();
                 return Ok(usuarios);
@@ -125,7 +121,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             try
             {
                 var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}', " +
-                $"estado = '{editarUsuario.estado}' WHERE id_usuario = {editarUsuario.id_usuario}";
+                $" WHERE id_usuario = {editarUsuario.id_usuario}";
                 var actualizar = db.ExecuteQuery(queryActualizar);
                  
 
@@ -140,21 +136,25 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
         }
 
-        [HttpDelete("catalogos/eliminar-usuario/{idUsuario}")]
-public IActionResult EliminarUsuario(int idUsuario)
+        [HttpDelete("catalogos/cambio-estado-usuario/{idUsuario}")]
+public IActionResult CambioEstadoUsuario(int idUsuario)
 {
-    try
-    {
-        // Aquí realizas la lógica para eliminar el usuario de la base de datos
-        var queryEliminar = $"DELETE FROM usuario WHERE id_usuario = {idUsuario}";
-        db.ExecuteQuery(queryEliminar);
+            try
+            {
+                // Aquí realizas la lógica para eliminar el usuario de la base de datos
+                var query = $"UPDATE usuario SET estado = CASE " +
+                    $"                                    WHEN estado = 1 THEN 0 " +
+                    $"                                    ELSE 1 END WHERE id_usuario = { idUsuario}";
 
-        return Ok("Usuario eliminado correctamente");
+
+                db.ExecuteQuery(query);
+
+        return Ok("Estado Cambiado Correctamente");
     }
     catch (Exception ex)
     {
         // En caso de error, devuelves un BadRequest con el mensaje de error
-        return BadRequest($"Error al eliminar el usuario: {ex.Message}");
+        return BadRequest($"Error al cambiar el estado  : {ex.Message}");
     }
 }
 
@@ -171,7 +171,7 @@ public IActionResult EliminarUsuario(int idUsuario)
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
                     var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email, estado) VALUES ( '{nuevoUsuario.id_rol}','{nuevoUsuario.nombre}', " +
-                                                                                                            $"'{nuevoUsuario.contrasenia}', '{nuevoUsuario.email}', 1)";
+                                                                                                            $"'{progra.EncriptarContraseña(nuevoUsuario.contrasenia)}', '{nuevoUsuario.email}', 1)";
                     db.ExecuteQuery(queryInsertar);
                     return Ok();
                 }
@@ -216,7 +216,8 @@ public IActionResult EliminarUsuario(int idUsuario)
         {
             try
             {
-                var query = $"SELECT * FROM usuario WHERE email = '{sesion.correo}' AND contrasenia = '{sesion.contrasenia}' AND estado = TRUE";
+
+                var query = $"SELECT * FROM usuario WHERE email = '{sesion.correo}' AND contrasenia = '{progra.EncriptarContraseña(sesion.contrasenia)}' AND estado = TRUE";
                 var resultado = db.ExecuteQuery(query);
 
                 if (resultado.Rows.Count == 0)
@@ -243,7 +244,7 @@ public IActionResult EliminarUsuario(int idUsuario)
                 // En caso de error, devolver un BadRequest con el mensaje de error
                 return BadRequest($"Error al autenticar al usuario: {ex.Message}");
             }
-        }
+            }
 
         [HttpPost("registro")]
         public IActionResult Register([FromBody] registro_usuario registro)
@@ -256,7 +257,7 @@ public IActionResult EliminarUsuario(int idUsuario)
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
-                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email,estado) VALUES ( 2,'{registro.nombre}', '{registro.contrasenia}', '{registro.email}',1)";
+                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email,estado) VALUES ( 2,'{registro.nombre}', '{progra.EncriptarContraseña(registro.contrasenia)}', '{registro.email}',1)";
                     db.ExecuteQuery(queryInsertar);
 
                     // Registro exitoso, devolver un Ok
