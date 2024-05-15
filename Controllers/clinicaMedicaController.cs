@@ -182,6 +182,45 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
         }
 
+        [HttpPost("catalogos/editar-aseguradora")]
+        public IActionResult EditarAseguradora([FromBody] aseguradoraModel aseguradora)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE aseguradora SET nombre = '{aseguradora.nombre}', copago = '{aseguradora.copago}', telefono = '{aseguradora.telefono}'" +
+                    $", Correo = '{aseguradora.Correo}'" +
+                $" WHERE id_aseguradora = {aseguradora.id_aseguradora}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-aseguradora")]
+        public IActionResult NuevaAseguradora([FromBody] aseguradoraModel aseguradora)
+        {
+            try
+            {
+                    var queryInsertar = $"INSERT INTO aseguradora (nombre,copago,telefono, Correo) " +
+                    $"VALUES ( '{aseguradora.nombre}', '{aseguradora.copago}', '{aseguradora.telefono}', '{aseguradora.Correo}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //---------------------------------------CITA
         [HttpGet("catalogos/cita")]
         public IActionResult GetCita()
@@ -209,8 +248,29 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-cita")]
+        public IActionResult EditarCita([FromBody] citaModel cita)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE cita SET expediente_id_expediente = '{cita.expediente_id_expediente}', medico_id_medico = '{cita.medico_id_medico}'" +
+                    $", id_estado_cita = '{cita.id_estado_cita}'" +
+                $" WHERE id_cita = {cita.id_cita}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
         //---------------------------------------contactoEmergencia
-        [HttpGet("catalogos/contactoEmergencia")]
+        [HttpGet("catalogos/contacto-emergencia")]
         public IActionResult GetContactoEmergencia()
         {
             try
@@ -235,6 +295,60 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+
+        }
+
+        [HttpPost("catalogos/editar-contacto-emergencia")]
+        public IActionResult EditarContactoEmergencia([FromBody] contacto_emergenciaModel contacto)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE contacto_emergencia SET id_relacion_paciente = '{contacto.id_relacion_paciente}', id_genero = '{contacto.id_genero}'" +
+                    $", primer_nombre = '{contacto.primer_nombre}', segundo_nombre = '{contacto.segundo_nombre}', primer_apellido = '{contacto.primer_apellido}'," +
+                    $" segundo_apellido = '{contacto.segundo_apellido}',telefono = '{contacto.telefono}'" +
+                $" WHERE id_contacto_emergencia = {contacto.id_contacto_emergencia}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-contacto-emergencia")]
+        public IActionResult nuevoContactoEmergencia([FromBody] contacto_emergenciaModel contacto)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT telefono FROM contacto_emergencia WHERE telefono = '{contacto.telefono}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO contacto_emergencia (id_relacion_paciente, id_genero, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, telefono) VALUES" +
+                        $" ( '{contacto.id_relacion_paciente}',{contacto.id_genero}',{contacto.primer_nombre}',{contacto.segundo_nombre}',{contacto.primer_apellido}'" +
+                        $",{contacto.segundo_apellido}',{contacto.telefono}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado este contacto");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
             }
         }
 
@@ -267,6 +381,47 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-direccion")]
+        public IActionResult Editardireccion([FromBody] direccionModel direccion)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE direccion SET id_municipio = '{direccion.id_municipio}', calle = '{direccion.calle}'" +
+                    $", avenida = '{direccion.avenida}', zona_barrio = '{direccion.zona_barrio}', residencial_colonia = '{direccion.residencial_colonia}'," +
+                    $" numero_vivienda = '{direccion.numero_vivienda}',indicacion_extra = '{direccion.indicacion_extra}'" +
+                $" WHERE id_direccion = {direccion.id_direccion}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-direccion")]
+        public IActionResult NuevaDireccion([FromBody] direccionModel direccion)
+        {
+            try
+            {
+                    var queryInsertar = $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda, indicacion_extra) VALUES" +
+                        $" ( '{direccion.id_municipio}',{direccion.calle}',{direccion.avenida}',{direccion.zona_barrio}',{direccion.residencial_colonia}')," +
+                        $"'{direccion.numero_vivienda}',{direccion.indicacion_extra}'";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //---------------------------------------expediente
         [HttpGet("catalogos/expediente")]
         public IActionResult GetExpediente()
@@ -291,8 +446,57 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-expediente")]
+        public IActionResult EditarExpediente([FromBody] expedienteModel expediente)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE expediente SET paciente_id_paciente = '{expediente.paciente_id_paciente}'" +
+                $" WHERE id_expediente = {expediente.id_expediente}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-Expediente")]
+        public IActionResult NuevoExpediente([FromBody] expedienteModel expediente)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT id_expediente FROM expediente WHERE email = '{expediente.paciente_id_paciente}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO expediente ( paciente_id_paciente, fecha_creacion) VALUES ( '{expediente.paciente_id_paciente}', GETDATE())";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese paciente");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //---------------------------------------fichaPaciente
-        [HttpGet("catalogos/fichaPaciente")]
+        [HttpGet("catalogos/ficha-paciente")]
         public IActionResult GetFichaPaciente()
         {
             try
@@ -329,6 +533,64 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("catalogos/editar-ficha-paciente")]
+        public IActionResult EditarFichaPaciente([FromBody] fichaPacienteModel fichaPaciente)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE ficha_paciente SET aseguradora_id_aseguradora = '{fichaPaciente.aseguradora_id_aseguradora}', id_contacto_emergencia = '{fichaPaciente.id_contacto_emergencia}', " +
+                $" id_direccion = '{fichaPaciente.id_direccion}', id_tipo_sangre = '{fichaPaciente.id_tipo_sangre}', id_ocupacion = '{fichaPaciente.id_ocupacion}', genero_idgenero = '{fichaPaciente.genero_idgenero}'," +
+                $" id_estado_civil = '{fichaPaciente.id_estado_civil}', primer_nombre = '{fichaPaciente.primer_nombre}', segundo_nombre = '{fichaPaciente.segundo_nombre}'," +
+                $" primer_apellido = '{fichaPaciente.primer_apellido}', segundo_apellido = '{fichaPaciente.segundo_apellido}', DPI = '{fichaPaciente.DPI}', fecha_nacimiento = '{fichaPaciente.fecha_nacimiento}', " +
+                $" telefono = '{fichaPaciente.telefono}', correo_electronico = '{fichaPaciente.correo_electronico}', NIT = '{fichaPaciente.NIT}', observaciones = '{fichaPaciente.observaciones}'" +
+                $" WHERE id_ficha_paciente = {fichaPaciente.id_ficha_paciente}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-ficha-paciente")]
+        public IActionResult NuevoExpediente([FromBody] fichaPacienteModel ficha)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT DPI FROM ficha_paciente WHERE DPI = '{ficha.DPI}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO ficha_paciente ( aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion, id_tipo_sangre, id_ocupacion, genero_idgenero, " +
+                        $"id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones) " +
+                        $"VALUES ( '{ficha.aseguradora_id_aseguradora}', '{ficha.id_contacto_emergencia}', '{ficha.id_direccion}', '{ficha.id_tipo_sangre}', '{ficha.id_ocupacion}', " +
+                        $"'{ficha.genero_idgenero}', '{ficha.id_estado_civil}'" +
+                        $", '{ficha.primer_nombre}', '{ficha.segundo_nombre}', '{ficha.primer_apellido}', '{ficha.segundo_apellido}', '{ficha.DPI}', '{ficha.fecha_nacimiento}'," +
+                        $", '{ficha.telefono}', '{ficha.correo_electronico}', '{ficha.NIT}', '{ficha.observaciones}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese paciente");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
             }
         }
 
@@ -370,6 +632,61 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-empleado")]
+        public IActionResult EditarEmpleado([FromBody] empleadoModel empleado)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE empleado SET id_direccion = '{empleado.id_direccion}', id_genero = '{empleado.id_genero}', id_estado_civil = '{empleado.id_estado_civil}', primer_nombre = '{empleado.primer_nombre}'," +
+                $" segundo_nombre = '{empleado.segundo_nombre}', primer_apellido = '{empleado.primer_apellido}', segundo_apellido = '{empleado.segundo_apellido}', DPI = '{empleado.DPI}', fecha_nacimiento = '{empleado.fecha_nacimiento}'," +
+                $" telefono = '{empleado.telefono}', correo_electronico = '{empleado.correo_electronico}', fecha_contratacion = '{empleado.fecha_contratacion}'" +
+                $" WHERE id_empleado = {empleado.id_empleado}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-empleado")]
+        public IActionResult NuevoEmpleado([FromBody] empleadoModel empleado)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT DPI FROM empleado WHERE DPI = '{empleado.DPI}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
+                        $" segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
+                        $"VALUES ( '{empleado.id_direccion}', '{empleado.id_genero}', '{empleado.id_estado_civil}', '{empleado.primer_nombre}', '{empleado.segundo_nombre}', " +
+                        $", '{empleado.primer_apellido}', '{empleado.segundo_apellido}', '{empleado.DPI}', '{empleado.fecha_nacimiento}', '{empleado.telefono}', " +
+                        $", '{empleado.correo_electronico}', '{empleado.fecha_contratacion}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese empleado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //-------------------------------------------especialidad
 
         [HttpGet("catalogos/especialidad")]
@@ -395,9 +712,59 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-especialidad")]
+        public IActionResult EditarEspecialidad([FromBody] especialidadModel especialidad)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE especialidad SET nombre = '{especialidad.nombre}', descipcion = '{especialidad.descipcion}'" +
+                $" WHERE id_especialidad = {especialidad.id_especialidad}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-especialidad")]
+        public IActionResult NuevaEspecialidad([FromBody] especialidadModel especialidad)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT  nombre FROM especialidad WHERE nombre = '{especialidad.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO especialidad ( nombre, descipcion) " +
+                        $"VALUES ( '{especialidad.nombre}', '{especialidad.descipcion}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado esta especialidad");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //-------------------------------------------estadoCita
 
-        [HttpGet("catalogos/estadoCita")]
+        [HttpGet("catalogos/estado-cita")]
         public IActionResult GetEstadoCita()
         {
             try
@@ -419,9 +786,59 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-estado-cita")]
+        public IActionResult EditarEstadoCita([FromBody] estadoCitaModel estado)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE estado_cita SET nombre = '{estado.nombre}' " +
+                $" WHERE id_estado_cita = {estado.id_estado_cita}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-estado-cita")]
+        public IActionResult NuevaEstadoCita([FromBody] estadoCitaModel estado)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT  nombre FROM estado_cita WHERE nombre = '{estado.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO estado_cita (nombre) " +
+                        $"VALUES ( '{estado.nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado este estado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //-------------------------------------------estadoCivil
 
-        [HttpGet("catalogos/estadoCivil")]
+        [HttpGet("catalogos/estado-civil")]
         public IActionResult GetEstadoCivil()
         {
             try
@@ -440,6 +857,55 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+        [HttpPost("catalogos/editar-estado-civil")]
+        public IActionResult EditarEstadoCivil([FromBody] estadoCivilModel estado)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE estado_civil SET nombre = '{estado.nombre}' " +
+                $" WHERE id_estado_civil = {estado.id_estado_civil}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-estado-civil")]
+        public IActionResult NuevaEstadoCivil([FromBody] estadoCivilModel estado)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT  nombre FROM estado_civil WHERE nombre = '{estado.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO estado_civil (nombre) " +
+                        $"VALUES ( '{estado.nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado este estado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
             }
         }
 
@@ -469,14 +935,14 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
         //-------------------------------------------medicoEspecialidad
 
-        [HttpGet("catalogos/medicoEspecialidad")]
+        [HttpGet("catalogos/medico-especialidad")]
         public IActionResult GetMedicoEspacialidad()
         {
             try
             {
                 var query = @"SELECT id_medico_especialidad, id_medico, especialidad_id_especialidad
                       FROM medico_especialidad 
-                      ORDER BY id_medico_especialidad";
+                      ORDER BY id_medico";
                 var resultado = db.ExecuteQuery(query);
                 var especialidades = resultado.AsEnumerable().Select(row => new medicoEspecialidadModel
                 {
@@ -492,6 +958,55 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-medico-especialidad")]
+        public IActionResult EditarMedicoEspecialiad([FromBody] medicoEspecialidadModel medicoEspecialidad)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE medico_especialidad SET id_medico = '{medicoEspecialidad.id_medico}', especialidad_id_especialidad = '{medicoEspecialidad.id_medico_especialidad}' " +
+                $" WHERE id_medico_especialidad = {medicoEspecialidad.id_medico_especialidad}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-medico-especialidad")]
+        public IActionResult NuevoMedicoEspecialiad([FromBody] medicoEspecialidadModel medicoEspecialidad)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT id_medico FROM medico_especialidad WHERE id_medico = '{medicoEspecialidad.id_medico}' AND especialidad_id_especialidad = '{medicoEspecialidad.id_medico_especialidad}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO medico_especialidad (id_medico,id_medico_especialidad ) " +
+                        $"VALUES ( '{medicoEspecialidad.id_medico}',{medicoEspecialidad.id_medico_especialidad})";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
 
         //-------------------------------------------medico
 
@@ -515,6 +1030,55 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+        [HttpPost("catalogos/editar-medico")]
+        public IActionResult EditarMedico([FromBody] medicoModel medico)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE medico SET colegiado = '{medico.colegiado}', id_empleado = '{medico.id_empleado}' " +
+                $" WHERE id_medico = {medico.id_medico}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-medico")]
+        public IActionResult NuevoMedico([FromBody] medicoModel medico)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT id_medico FROM medico WHERE id_medico = '{medico.colegiado}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO medico (colegiado,id_empleado ) " +
+                        $"VALUES ( '{medico.colegiado}',{medico.id_empleado})";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado este medico");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
             }
         }
 
@@ -542,9 +1106,59 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
+        [HttpPost("catalogos/editar-ocupacion")]
+        public IActionResult EditarOcupacion([FromBody] ocupacionModel ocupacion)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE ocupacion SET nombre = '{ocupacion.nombre}' " +
+                $" WHERE id_ocupacion = {ocupacion.id_ocupacion}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-ocupacion")]
+        public IActionResult NuevaOcupacion([FromBody] ocupacionModel ocupacion)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT nombre FROM ocupacion WHERE id_medico = '{ocupacion.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO ocupacion (nombre) " +
+                        $"VALUES ( '{ocupacion.nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
         //-------------------------------------------tipoSangre
 
-        [HttpGet("catalogos/tipoSangre")]
+        [HttpGet("catalogos/tipo-sangre")]
         public IActionResult GetTipoSangre()
         {
             try
@@ -565,6 +1179,218 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 return BadRequest(ex);
             }
         }
+
+        [HttpPost("catalogos/editar-tipo-sangre")]
+        public IActionResult EditarTipoSangre([FromBody] tipoSangreModel sangre)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE tipo_sangre SET nombre = '{sangre.Nombre}' " +
+                $" WHERE id_tipo_sangre = {sangre.id_tipo_sangre}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-tipo-sangre")]
+        public IActionResult NuevoTipoSangre([FromBody] tipoSangreModel sangre)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT Nombre FROM tipo_sangre WHERE id_medico = '{sangre.Nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO tipo_sangre (Nombre) " +
+                        $"VALUES ( '{sangre.Nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        //---------------------------------------------------------------------------------------------------------------------------
+        //-----------------------------DEPARTAMENTO
+        [HttpGet("catalogos/departamento")]
+        public IActionResult GetDepartamento()
+        {
+            try
+            {
+                var query = @"SELECT id_departamento, nombre
+                     FROM departamento 
+                     ORDER BY id_deparamento";
+                var resultado = db.ExecuteQuery(query);
+                var departamentos = resultado.AsEnumerable().Select(row => new departamentoModel
+                {
+                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    nombre = row["nombre"].ToString()
+                }).ToList();
+                return Ok(departamentos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("catalogos/editar-departamento")]
+        public IActionResult editarDepartamento([FromBody] departamentoModel editarDep)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE departamento SET nombre = '{editarDep.nombre}' " +
+                $" WHERE id_departamento = {editarDep.id_departamento}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-departamento")]
+        public IActionResult nuevoDepartamento([FromBody] departamentoModel nuevoDeo)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT nombre FROM departamento WHERE email = '{nuevoDeo.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO departamento (nombre) VALUES ( '{nuevoDeo.nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese departamento");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //-----------------------------Municipio
+        [HttpGet("catalogos/municipio")]
+        public IActionResult GetMunicipio()
+        {
+            try
+            {
+                var query = @"SELECT id_municipio,id_departamento, nombre
+                     FROM municipio 
+                     ORDER BY id_municipio";
+                var resultado = db.ExecuteQuery(query);
+                var municipios = resultado.AsEnumerable().Select(row => new municipioModel
+                {
+                    id_municipio = Convert.ToInt32(row["id_municipio"]),
+                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    nombre = row["nombre"].ToString()
+                }).ToList();
+                return Ok(municipios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("catalogos/editar-municipio")]
+        public IActionResult EditarMunicipio([FromBody] municipioModel editarMuni)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE municipio SET id_departamento = '{editarMuni.id_departamento}', nombre = '{editarMuni.nombre}'" +
+                $" WHERE id_municipio = {editarMuni.id_municipio}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-municipio")]
+        public IActionResult nuevoMunicipio([FromBody] municipioModel nuevoMuni)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT nombre FROM municipio WHERE email = '{nuevoMuni.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO municipio (nombre) VALUES ( '{nuevoMuni.nombre}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese departamento");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+        // AQUI SE ACABAN LOS CATALOGOS DE PROCESO DE CITA
+
         //-------------------------------------------USUARIOS
 
         [HttpGet("catalogos/usuarios")]
@@ -689,153 +1515,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
 
         }
-
-        //-----------------------------DEPARTAMENTO
-        [HttpGet("catalogos/departamento")]
-        public IActionResult GetDepartamento()
-        {
-            try
-            {
-                var query = @"SELECT id_departamento, nombre
-                     FROM departamento 
-                     ORDER BY id_deparamento";
-                var resultado = db.ExecuteQuery(query);
-                var departamentos = resultado.AsEnumerable().Select(row => new departamentoModel
-                {
-                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
-                    nombre = row["nombre"].ToString()
-                }).ToList();
-                return Ok(departamentos);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpPost("catalogos/editar-departamento")]
-        public IActionResult editarDepartamento([FromBody] departamentoRequest editarDep)
-        {
-            try
-            {
-                var queryActualizar = $"UPDATE departamento SET nombre = '{editarDep.nombre}' " +
-                $" WHERE id_departamento = {editarDep.id_departamento}";
-                var actualizar = db.ExecuteQuery(queryActualizar);
-
-
-                return Ok();
-            }
-            catch (Exception ex)
-            { 
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-
-
-        }
-
-        [HttpPost("catalogos/nuevo-departamento")]
-        public IActionResult nuevoDepartamento([FromBody] departamentoRequest nuevoDeo)
-        {
-            try
-            {
-                // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT nombre FROM departamento WHERE email = '{nuevoDeo.nombre}'";
-                var resultadoValidador = db.ExecuteQuery(queryValidador);
-
-                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
-                {
-                    var queryInsertar = $"INSERT INTO departamento (nombre) VALUES ( '{nuevoDeo.nombre}'";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
-                }
-                else
-                {
-                    // El usuario ya existe, devolver un BadRequest
-                    return BadRequest("Ya esta registrado ese departamento");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-        }
-
-        //-----------------------------Municipio
-        [HttpGet("catalogos/municipio")]
-        public IActionResult GetMunicipio()
-        {
-            try
-            {
-                var query = @"SELECT id_municipio,id_departamento, nombre
-                     FROM municipio 
-                     ORDER BY id_municipio";
-                var resultado = db.ExecuteQuery(query);
-                var municipios = resultado.AsEnumerable().Select(row => new municipioModel
-                {
-                    id_municipio = Convert.ToInt32(row["id_municipio"]),
-                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
-                    nombre = row["nombre"].ToString()
-                }).ToList();
-                return Ok(municipios);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpPost("catalogos/editar-municipio")]
-        public IActionResult EditarMunicipio([FromBody] municipioRequest editarMuni)
-        {
-            try
-            {
-                var queryActualizar = $"UPDATE municipio SET id_departamento = '{editarMuni.id_departamento}', nombre = '{editarMuni.nombre}'" +
-                $" WHERE id_municipio = {editarMuni.id_municipio}";
-                var actualizar = db.ExecuteQuery(queryActualizar);
-
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-
-
-        }
-
-        [HttpPost("catalogos/nuevo-municipio")]
-        public IActionResult nuevoMunicipio([FromBody] municipioRequest nuevoMuni)
-        {
-            try
-            {
-                // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT nombre FROM departamento WHERE email = '{nuevoMuni.nombre}'";
-                var resultadoValidador = db.ExecuteQuery(queryValidador);
-
-                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
-                {
-                    var queryInsertar = $"INSERT INTO municipio (nombre) VALUES ( '{nuevoMuni.nombre}'";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
-                }
-                else
-                {
-                    // El usuario ya existe, devolver un BadRequest
-                    return BadRequest("Ya esta registrado ese departamento");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-        }
+        
     }
 }
 
