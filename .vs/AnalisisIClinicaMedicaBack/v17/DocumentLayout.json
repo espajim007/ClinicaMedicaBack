@@ -1,30 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\pared\\Documents\\Clinica\\Back\\",
+  "WorkspaceRootPath": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\models\\citamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\citamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\requests\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:requests\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\models\\expedientemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\expedientemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\requests\\registro-usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:requests\\registro-usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\models\\fichapacientemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\fichapacientemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\controllers\\clinicamedicacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:controllers\\clinicamedicacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\models\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\pared\\documents\\clinica\\back\\models\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:models\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\requests\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:requests\\sesion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\requests\\registro-usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:requests\\registro-usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|c:\\users\\jrgj5\\documents\\proyectoclinicamedica\\back\\controllers\\clinicamedicacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8BCE7E17-0838-42CA-A56D-B1DB65E8ACAB}|AnalisisIClinicaMedicaBack.csproj|solutionrelative:controllers\\clinicamedicacontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -39,10 +51,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "citaModel.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\citaModel.cs",
+              "RelativeDocumentMoniker": "Models\\citaModel.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\citaModel.cs",
+              "RelativeToolTip": "Models\\citaModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T04:38:15.649Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "expedienteModel.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\expedienteModel.cs",
+              "RelativeDocumentMoniker": "Models\\expedienteModel.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\expedienteModel.cs",
+              "RelativeToolTip": "Models\\expedienteModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T04:36:21.98Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "fichaPacienteModel.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\fichaPacienteModel.cs",
+              "RelativeDocumentMoniker": "Models\\fichaPacienteModel.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\fichaPacienteModel.cs",
+              "RelativeToolTip": "Models\\fichaPacienteModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-15T04:17:30.992Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Program.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Program.cs",
               "RelativeToolTip": "Program.cs",
               "ViewState": "AQIAAA8AAAAAAAAAAAAAACMAAAACAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -53,48 +108,46 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "usuario.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Models\\usuario.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\usuario.cs",
               "RelativeDocumentMoniker": "Models\\usuario.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Models\\usuario.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\usuario.cs",
               "RelativeToolTip": "Models\\usuario.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-12T00:16:12.518Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "clinicaMedicaController.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Controllers\\clinicaMedicaController.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Controllers\\clinicaMedicaController.cs",
               "RelativeDocumentMoniker": "Controllers\\clinicaMedicaController.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Controllers\\clinicaMedicaController.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Controllers\\clinicaMedicaController.cs",
               "RelativeToolTip": "Controllers\\clinicaMedicaController.cs",
               "ViewState": "AQIAAGsAAAAAAAAAAAAtwHkAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-12T00:16:12.522Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-12T00:16:12.522Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 7,
               "Title": "registro-usuario.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Requests\\registro-usuario.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Requests\\registro-usuario.cs",
               "RelativeDocumentMoniker": "Requests\\registro-usuario.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Requests\\registro-usuario.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Requests\\registro-usuario.cs",
               "RelativeToolTip": "Requests\\registro-usuario.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-12T00:16:12.515Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-12T00:16:12.515Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "rol.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Models\\rol.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\rol.cs",
               "RelativeDocumentMoniker": "Models\\rol.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Models\\rol.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Models\\rol.cs",
               "RelativeToolTip": "Models\\rol.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAEAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -103,16 +156,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "Sesion.cs",
-              "DocumentMoniker": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Requests\\Sesion.cs",
+              "DocumentMoniker": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Requests\\Sesion.cs",
               "RelativeDocumentMoniker": "Requests\\Sesion.cs",
-              "ToolTip": "C:\\Users\\pared\\Documents\\Clinica\\Back\\Requests\\Sesion.cs",
+              "ToolTip": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\Requests\\Sesion.cs",
               "RelativeToolTip": "Requests\\Sesion.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-12T00:24:15.871Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-12T00:24:15.871Z"
             }
           ]
         }
