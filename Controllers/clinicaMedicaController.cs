@@ -331,6 +331,240 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 return BadRequest(ex);
             }
         }
+
+        //-------------------------------------------empleado
+
+        [HttpGet("catalogos/empleados")]
+        public IActionResult GetEmpleados()
+        {
+            try
+            {
+                var query = @"SELECT id_empleado, id_direccion, id_genero, id_estado_civil, 
+                                    primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, 
+                                    DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion
+                              FROM empleado 
+                              ORDER BY id_empleado";
+                var resultado = db.ExecuteQuery(query);
+                var empleados = resultado.AsEnumerable().Select(row => new empleadoModel
+                {
+                    id_empleado = Convert.ToInt32(row["id_empleado"]),
+                    id_direccion = Convert.ToInt32(row["id_direccion"]),
+                    id_genero = Convert.ToInt32(row["id_genero"]),
+                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
+                    primer_nombre = row["primer_nombre"]?.ToString(),
+                    segundo_nombre = row["segundo_nombre"]?.ToString(),
+                    primer_apellido = row["primer_apellido"]?.ToString(),
+                    segundo_apellido = row["segundo_apellido"]?.ToString(),
+                    DPI = row["DPI"]?.ToString(),
+                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
+                    telefono = row["telefono"] as int?,
+                    correo_electronico = row["correo_electronico"]?.ToString(),
+                    fecha_contratacion = ((DateTime)row["fecha_contratacion"]).Date,
+
+                }).ToList();
+                return Ok(empleados);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------especialidad
+
+        [HttpGet("catalogos/especialidad")]
+        public IActionResult GetEspecialidad()
+        {
+            try
+            {
+                var query = @"SELECT id_especialidad, nombre, descipcion
+                     FROM especialidad 
+                     ORDER BY id_especialidad";
+                var resultado = db.ExecuteQuery(query);
+                var especialidades = resultado.AsEnumerable().Select(row => new especialidadModel
+                {
+                    id_especialidad = Convert.ToInt32(row["id_especialidad"]),
+                    nombre = row["nombre"]?.ToString(),
+                    descipcion = row["descipcion"]?.ToString()
+                }).ToList();
+                return Ok(especialidades);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------estadoCita
+
+        [HttpGet("catalogos/estadoCita")]
+        public IActionResult GetEstadoCita()
+        {
+            try
+            {
+                var query = @"SELECT id_estado_cita, nombre
+                     FROM estado_cita 
+                     ORDER BY id_estado_cita";
+                var resultado = db.ExecuteQuery(query);
+                var estadoCitas = resultado.AsEnumerable().Select(row => new estadoCitaModel
+                {
+                    id_estado_cita = Convert.ToInt32(row["id_estado_cita"]),
+                    nombre = row["nombre"]?.ToString(),
+                }).ToList();
+                return Ok(estadoCitas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------estadoCivil
+
+        [HttpGet("catalogos/estadoCivil")]
+        public IActionResult GetEstadoCivil()
+        {
+            try
+            {
+                var query = @"SELECT id_estado_civil, nombre
+                     FROM estado_civil 
+                     ORDER BY id_estado_civil";
+                var resultado = db.ExecuteQuery(query);
+                var estadosCiviles = resultado.AsEnumerable().Select(row => new estadoCivilModel
+                {
+                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
+                    nombre = row["nombre"]?.ToString(),
+                }).ToList();
+                return Ok(estadosCiviles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------genero
+
+        [HttpGet("catalogos/genero")]
+        public IActionResult GetGenero()
+        {
+            try
+            {
+                var query = @"SELECT idgenero, genero
+                     FROM genero 
+                     ORDER BY idgenero";
+                var resultado = db.ExecuteQuery(query);
+                var generos = resultado.AsEnumerable().Select(row => new generoModel
+                {
+                    idgenero = Convert.ToInt32(row["idgenero"]),
+                    genero = row["genero"]?.ToString(),
+                }).ToList();
+                return Ok(generos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------medicoEspecialidad
+
+        [HttpGet("catalogos/medicoEspecialidad")]
+        public IActionResult GetMedicoEspacialidad()
+        {
+            try
+            {
+                var query = @"SELECT id_medico_especialidad, id_medico, especialidad_id_especialidad
+                      FROM medico_especialidad 
+                      ORDER BY id_medico_especialidad";
+                var resultado = db.ExecuteQuery(query);
+                var especialidades = resultado.AsEnumerable().Select(row => new medicoEspecialidadModel
+                {
+                    id_medico_especialidad = Convert.ToInt32(row["id_medico_especialidad"]),
+                    id_medico = Convert.ToInt32(row["id_medico"]),
+                    especialidad_id_especialidad = Convert.ToInt32(row["especialidad_id_especialidad"])
+                }).ToList();
+                return Ok(especialidades);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        //-------------------------------------------medico
+
+        [HttpGet("catalogos/medico")]
+        public IActionResult GetMedico()
+        {
+            try
+            {
+                var query = @"SELECT id_medico, colegiado, id_empleado
+                      FROM medico
+                      ORDER BY id_medico";
+                var resultado = db.ExecuteQuery(query);
+                var medicos = resultado.AsEnumerable().Select(row => new medicoModel
+                {
+                    id_medico = Convert.ToInt32(row["id_medico"]),
+                    colegiado = Convert.ToInt32(row["colegiado"]),
+                    id_empleado = Convert.ToInt32(row["id_empleado"])
+                }).ToList();
+                return Ok(medicos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------ocupacion
+
+        [HttpGet("catalogos/ocupacion")]
+        public IActionResult GetOcupacion()
+        {
+            try
+            {
+                var query = @"SELECT id_ocupacion, nombre
+                      FROM ocupacion
+                      ORDER BY id_ocupacion";
+                var resultado = db.ExecuteQuery(query);
+                var ocupaciones = resultado.AsEnumerable().Select(row => new ocupacionModel
+                {
+                    id_ocupacion = Convert.ToInt32(row["id_ocupacion"]),
+                    nombre = row["nombre"].ToString(),
+                }).ToList();
+                return Ok(ocupaciones);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //-------------------------------------------tipoSangre
+
+        [HttpGet("catalogos/tipoSangre")]
+        public IActionResult GetTipoSangre()
+        {
+            try
+            {
+                var query = @"SELECT id_tipo_sangre, Nombre
+                      FROM tipo_sangre
+                      ORDER BY id_tipo_sangre";
+                var resultado = db.ExecuteQuery(query);
+                var tiposSangre = resultado.AsEnumerable().Select(row => new tipoSangreModel
+                {
+                    id_tipo_sangre = Convert.ToInt32(row["id_tipo_sangre"]),
+                    Nombre = row["Nombre"].ToString(),
+                }).ToList();
+                return Ok(tiposSangre);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         //-------------------------------------------USUARIOS
 
         [HttpGet("catalogos/usuarios")]
