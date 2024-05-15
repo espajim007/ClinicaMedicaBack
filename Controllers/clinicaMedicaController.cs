@@ -86,130 +86,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             progra = new Progra(configuration);
         }
 
-        //Catalogos
-
-        [HttpGet("catalogos/usuarios")]
-        public IActionResult GetUsuarios()
-        {
-            try
-            {
-                var query = @"SELECT id_usuario, id_rol , nombre, email, contrasenia,estado
-                     FROM usuario 
-                     ORDER BY id_usuario";
-                var resultado = db.ExecuteQuery(query);
-                var usuarios = resultado.AsEnumerable().Select(row => new usuario
-                {
-                    id_usuario = Convert.ToInt32(row["id_usuario"]),
-                    id_rol = Convert.ToInt32(row["id_rol"]),
-                    nombre = row["nombre"].ToString(),
-                    email = row["email"].ToString(),
-                    contrasenia = row["contrasenia"].ToString(), // Aquí obtienes la contraseña
-                    estado = Convert.ToBoolean(row["estado"])
-                }).ToList();
-                return Ok(usuarios);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-
-        [HttpPost("catalogos/editar-usuario")]
-        public IActionResult editarUsuario([FromBody] registro_usuario editarUsuario)
-        {
-            try
-            {
-                var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}' " +
-                $" WHERE id_usuario = {editarUsuario.id_usuario}";
-                var actualizar = db.ExecuteQuery(queryActualizar);
-                 
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-
-
-        }
-
-        [HttpDelete("catalogos/cambio-estado-usuario/{idUsuario}")]
-    public IActionResult CambioEstadoUsuario(int idUsuario)
-    {
-            try
-            {
-                // Aquí realizas la lógica para eliminar el usuario de la base de datos
-                var query = $"UPDATE usuario SET estado = CASE " +
-                    $"                                    WHEN estado = 1 THEN 0 " +
-                    $"                                    ELSE 1 END WHERE id_usuario = { idUsuario}";
-
-
-                db.ExecuteQuery(query);
-
-        return Ok("Estado Cambiado Correctamente");
-    }
-    catch (Exception ex)
-    {
-        // En caso de error, devuelves un BadRequest con el mensaje de error
-        return BadRequest($"Error al cambiar el estado  : {ex.Message}");
-    }
-}
-
-
-        [HttpPost("catalogos/nuevo-usuario")]
-        public IActionResult nuevoUsuario([FromBody] registro_usuario nuevoUsuario)
-        {
-            try
-            {
-                // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT email FROM usuario WHERE email = '{nuevoUsuario.email}'";
-                var resultadoValidador = db.ExecuteQuery(queryValidador);
-
-                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
-                {
-                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email, estado) VALUES ( '{nuevoUsuario.id_rol}','{nuevoUsuario.nombre}', " +
-                                                                                                            $"'{progra.EncriptarContraseña(nuevoUsuario.contrasenia)}', '{nuevoUsuario.email}', 1)";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
-                }
-                else
-                {
-                    // El usuario ya existe, devolver un BadRequest
-                    return BadRequest("Ya esta registrado ese correo");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("catalogos/roles")]
-        public IActionResult GetRoles()
-        {
-            try
-            {
-                var query = @"SELECT *
-                             FROM rol";
-                var resultado = db.ExecuteQuery(query);
-                var roles = resultado.AsEnumerable().Select(row => new rol
-                {
-                    id_rol = Convert.ToInt32(row["id_rol"]),
-                    nombre = row["nombre"].ToString(),
-                }).ToList();
-                return Ok(roles);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-
-        }
+       
 
         [HttpPost("sesion")]
         public IActionResult sesion([FromBody] Sesion sesion)
@@ -267,6 +144,280 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 {
                     // El usuario ya existe, devolver un BadRequest
                     return BadRequest("El usuario ya está registrado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //Catalogos
+
+        //-------------------------------------------USUARIOS
+
+        [HttpGet("catalogos/usuarios")]
+        public IActionResult GetUsuarios()
+        {
+            try
+            {
+                var query = @"SELECT id_usuario, id_rol , nombre, email, contrasenia,estado
+                     FROM usuario 
+                     ORDER BY id_usuario";
+                var resultado = db.ExecuteQuery(query);
+                var usuarios = resultado.AsEnumerable().Select(row => new usuario
+                {
+                    id_usuario = Convert.ToInt32(row["id_usuario"]),
+                    id_rol = Convert.ToInt32(row["id_rol"]),
+                    nombre = row["nombre"].ToString(),
+                    email = row["email"].ToString(),
+                    contrasenia = row["contrasenia"].ToString(), // Aquí obtienes la contraseña
+                    estado = Convert.ToBoolean(row["estado"])
+                }).ToList();
+                return Ok(usuarios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+        [HttpPost("catalogos/editar-usuario")]
+        public IActionResult editarUsuario([FromBody] registro_usuario editarUsuario)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}' " +
+                $" WHERE id_usuario = {editarUsuario.id_usuario}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpDelete("catalogos/cambio-estado-usuario/{idUsuario}")]
+        public IActionResult CambioEstadoUsuario(int idUsuario)
+        {
+            try
+            {
+                // Aquí realizas la lógica para eliminar el usuario de la base de datos
+                var query = $"UPDATE usuario SET estado = CASE " +
+                    $"                                    WHEN estado = 1 THEN 0 " +
+                    $"                                    ELSE 1 END WHERE id_usuario = {idUsuario}";
+
+
+                db.ExecuteQuery(query);
+
+                return Ok("Estado Cambiado Correctamente");
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devuelves un BadRequest con el mensaje de error
+                return BadRequest($"Error al cambiar el estado  : {ex.Message}");
+            }
+        }
+
+
+        [HttpPost("catalogos/nuevo-usuario")]
+        public IActionResult nuevoUsuario([FromBody] registro_usuario nuevoUsuario)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT email FROM usuario WHERE email = '{nuevoUsuario.email}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO usuario (id_rol, nombre, contrasenia, email, estado) VALUES ( '{nuevoUsuario.id_rol}','{nuevoUsuario.nombre}', " +
+                                                                                                            $"'{progra.EncriptarContraseña(nuevoUsuario.contrasenia)}', '{nuevoUsuario.email}', 1)";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese correo");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+        //---------------------------------------ROLES
+        [HttpGet("catalogos/roles")]
+        public IActionResult GetRoles()
+        {
+            try
+            {
+                var query = @"SELECT *
+                             FROM rol";
+                var resultado = db.ExecuteQuery(query);
+                var roles = resultado.AsEnumerable().Select(row => new rol
+                {
+                    id_rol = Convert.ToInt32(row["id_rol"]),
+                    nombre = row["nombre"].ToString(),
+                }).ToList();
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+        //-----------------------------DEPARTAMENTO
+        [HttpGet("catalogos/departamento")]
+        public IActionResult GetDepartamento()
+        {
+            try
+            {
+                var query = @"SELECT id_departamento, nombre
+                     FROM departamento 
+                     ORDER BY id_deparamento";
+                var resultado = db.ExecuteQuery(query);
+                var departamentos = resultado.AsEnumerable().Select(row => new departamentoModel
+                {
+                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    nombre = row["nombre"].ToString()
+                }).ToList();
+                return Ok(departamentos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("catalogos/editar-departamento")]
+        public IActionResult editarDepartamento([FromBody] departamentoRequest editarDep)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE departamento SET nombre = '{editarDep.nombre}' " +
+                $" WHERE id_departamento = {editarDep.id_departamento}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            { 
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-departamento")]
+        public IActionResult nuevoDepartamento([FromBody] departamentoRequest nuevoDeo)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT nombre FROM departamento WHERE email = '{nuevoDeo.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO departamento (nombre) VALUES ( '{nuevoDeo.nombre}'";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese departamento");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //-----------------------------Municipio
+        [HttpGet("catalogos/municipio")]
+        public IActionResult GetMunicipio()
+        {
+            try
+            {
+                var query = @"SELECT id_municipio,id_departamento, nombre
+                     FROM municipio 
+                     ORDER BY id_municipio";
+                var resultado = db.ExecuteQuery(query);
+                var municipios = resultado.AsEnumerable().Select(row => new municipioModel
+                {
+                    id_municipio = Convert.ToInt32(row["id_municipio"]),
+                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    nombre = row["nombre"].ToString()
+                }).ToList();
+                return Ok(municipios);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPost("catalogos/editar-municipio")]
+        public IActionResult EditarMunicipio([FromBody] municipioRequest editarMuni)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE municipio SET id_departamento = '{editarMuni.id_departamento}', nombre = '{editarMuni.nombre}'" +
+                $" WHERE id_municipio = {editarMuni.id_municipio}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-municipio")]
+        public IActionResult nuevoMunicipio([FromBody] municipioRequest nuevoMuni)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT nombre FROM departamento WHERE email = '{nuevoMuni.nombre}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO municipio (nombre) VALUES ( '{nuevoMuni.nombre}'";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese departamento");
                 }
 
             }
