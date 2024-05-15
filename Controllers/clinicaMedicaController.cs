@@ -120,7 +120,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}', " +
+                var queryActualizar = $"UPDATE usuario SET id_rol = '{editarUsuario.id_rol}',nombre ='{editarUsuario.nombre}',email ='{editarUsuario.email}' " +
                 $" WHERE id_usuario = {editarUsuario.id_usuario}";
                 var actualizar = db.ExecuteQuery(queryActualizar);
                  
@@ -137,8 +137,8 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         }
 
         [HttpDelete("catalogos/cambio-estado-usuario/{idUsuario}")]
-public IActionResult CambioEstadoUsuario(int idUsuario)
-{
+    public IActionResult CambioEstadoUsuario(int idUsuario)
+    {
             try
             {
                 // Aquí realizas la lógica para eliminar el usuario de la base de datos
