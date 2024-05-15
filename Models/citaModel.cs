@@ -6,7 +6,7 @@
         public int? expediente_id_expediente { get; set; }
         public int? medico_id_medico { get; set; }
         public int? id_estado_cita { get; set; }
-        public DateOnly? fecha { get; set; }
-        public TimeOnly? hora { get; set; }
+        public DateTime? fecha { get; set; }
+        public TimeSpan? hora { get; set; }
     }
 }

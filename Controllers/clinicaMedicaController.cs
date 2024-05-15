@@ -155,7 +155,182 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         }
 
         //Catalogos
+        //---------------------------------------ASEGURADORA
+        [HttpGet("catalogos/aseguradora")]
+        public IActionResult GetAseguradora()
+        {
+            try
+            {
+                var query = @"SELECT id_aseguradora, nombre, copago, telefono, Correo
+                     FROM aseguradora 
+                     ORDER BY id_aseguradora";
+                var resultado = db.ExecuteQuery(query);
+                var aseguradora = resultado.AsEnumerable().Select(row => new aseguradoraModel
+                {
+                    id_aseguradora = Convert.ToInt32(row["id_aseguradora"]),
+                    nombre = row["nombre"].ToString(),
+                    copago = Convert.ToDouble(row["copago"]),
+                    telefono = Convert.ToInt32(row["telefono"]),
+                    Correo = row["Correo"].ToString(),
+                }).ToList();
+                return Ok(aseguradora);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
 
+        }
+
+        //---------------------------------------CITA
+        [HttpGet("catalogos/cita")]
+        public IActionResult GetCita()
+        {
+            try
+            {
+                var query = @"SELECT id_cita, expediente_id_expediente, medico_id_medico, id_estado_cita, fecha, hora
+                     FROM cita 
+                     ORDER BY id_cita";
+                var resultado = db.ExecuteQuery(query);
+                var citas = resultado.AsEnumerable().Select(row => new citaModel
+                {
+                    id_cita = Convert.ToInt32(row["id_cita"]),
+                    expediente_id_expediente = Convert.ToInt32(row["expediente_id_expediente"]),
+                    medico_id_medico = Convert.ToInt32(row["medico_id_medico"]),
+                    id_estado_cita = Convert.ToInt32(row["id_estado_cita"]),
+                    fecha = ((DateTime)row["fecha"]).Date,
+                    hora = TimeSpan.Parse(row["hora"].ToString())
+                }).ToList();
+                return Ok(citas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //---------------------------------------contactoEmergencia
+        [HttpGet("catalogos/contactoEmergencia")]
+        public IActionResult GetContactoEmergencia()
+        {
+            try
+            {
+                var query = @"SELECT id_contacto_emergencia, id_relacion_paciente, id_genero, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, telefono
+                     FROM contacto_emergencia 
+                     ORDER BY id_contacto_emergencia";
+                var resultado = db.ExecuteQuery(query);
+                var contactosEmergencias = resultado.AsEnumerable().Select(row => new contacto_emergenciaModel
+                {
+                    id_contacto_emergencia = Convert.ToInt32(row["id_contacto_emergencia"]),
+                    id_relacion_paciente = Convert.ToInt32(row["id_relacion_paciente"]),
+                    id_genero = Convert.ToInt32(row["id_genero"]),
+                    primer_nombre = row["primer_nombre"].ToString(),
+                    segundo_nombre = row["segundo_nombre"].ToString(),
+                    primer_apellido = row["primer_apellido"].ToString(),
+                    segundo_apellido = row["segundo_apellido"].ToString(),
+                    telefono = Convert.ToInt32(row["telefono"])
+                }).ToList();
+                return Ok(contactosEmergencias);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //---------------------------------------direccion
+        [HttpGet("catalogos/direccion")]
+        public IActionResult GetDireccion()
+        {
+            try
+            {
+                var query = @"SELECT id_direccion, id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda, indicacion_extra
+                     FROM direccion 
+                     ORDER BY id_direccion";
+                var resultado = db.ExecuteQuery(query);
+                var direcciones = resultado.AsEnumerable().Select(row => new direccionModel
+                {
+                    id_direccion = Convert.ToInt32(row["id_direccion"]),
+                    id_municipio = Convert.ToInt32(row["id_municipio"]),
+                    calle = row["calle"].ToString(),
+                    avenida = row["avenida"].ToString(),
+                    zona_barrio = row["zona_barrio"].ToString(),
+                    residencial_colonia = row["residencial_colonia"].ToString(),
+                    numero_vivienda = row["numero_vivienda"].ToString(),
+                    indicacion_extra = row["indicacion_extra"].ToString()
+                }).ToList();
+                return Ok(direcciones);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //---------------------------------------expediente
+        [HttpGet("catalogos/expediente")]
+        public IActionResult GetExpediente()
+        {
+            try
+            {
+                var query = @"SELECT id_expediente, paciente_id_paciente, fecha_creacion
+                     FROM expediente 
+                     ORDER BY id_expediente";
+                var resultado = db.ExecuteQuery(query);
+                var expedientes = resultado.AsEnumerable().Select(row => new expedienteModel
+                {
+                    id_expediente = Convert.ToInt32(row["id_expediente"]),
+                    paciente_id_paciente = Convert.ToInt32(row["paciente_id_paciente"]),
+                    fecha_creacion = ((DateTime)row["fecha_creacion"]).Date,
+                }).ToList();
+                return Ok(expedientes);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        //---------------------------------------fichaPaciente
+        [HttpGet("catalogos/fichaPaciente")]
+        public IActionResult GetFichaPaciente()
+        {
+            try
+            {
+                var query = @"SELECT id_ficha_paciente, aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion,
+                id_tipo_sangre, id_ocupacion, genero_idgenero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, 
+                segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones
+                     FROM ficha_paciente 
+                     ORDER BY id_ficha_paciente";
+                var resultado = db.ExecuteQuery(query);
+                var fichas = resultado.AsEnumerable().Select(row => new fichaPacienteModel
+                {
+                    id_ficha_paciente = Convert.ToInt32(row["id_ficha_paciente"]),
+                    aseguradora_id_aseguradora = Convert.ToInt32(row["aseguradora_id_aseguradora"]),
+                    id_contacto_emergencia = Convert.ToInt32(row["id_contacto_emergencia"]),
+                    id_direccion = Convert.ToInt32(row["id_direccion"]),
+                    id_tipo_sangre = Convert.ToInt32(row["id_tipo_sangre"]),
+                    id_ocupacion = Convert.ToInt32(row["id_ocupacion"]),
+                    genero_idgenero = Convert.ToInt32(row["genero_idgenero"]),
+                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
+                    primer_nombre = row["primer_nombre"].ToString(),
+                    segundo_nombre = row["segundo_nombre"].ToString(),
+                    primer_apellido = row["primer_apellido"].ToString(),
+                    segundo_apellido = row["segundo_apellido"].ToString(),
+                    DPI = row["DPI"].ToString(),
+                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
+                    telefono = Convert.ToInt32(row["telefono"]),
+                    correo_electronico = row["correo_electronico"].ToString(),
+                    NIT = row["NIT"].ToString(),
+                    observaciones = row["observaciones"].ToString()
+                }).ToList();
+                return Ok(fichas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         //-------------------------------------------USUARIOS
 
         [HttpGet("catalogos/usuarios")]

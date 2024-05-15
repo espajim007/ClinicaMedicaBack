@@ -825,19 +825,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jrgj5\\.nuget\\packages\\": {}
+    "C:\\Users\\asijt\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\AnalisisIClinicaMedicaBack.csproj",
+      "projectUniqueName": "C:\\data\\Clinicamedica\\back\\AnalisisIClinicaMedicaBack.csproj",
       "projectName": "AnalisisIClinicaMedicaBack",
-      "projectPath": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\AnalisisIClinicaMedicaBack.csproj",
-      "packagesPath": "C:\\Users\\jrgj5\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jrgj5\\Documents\\ProyectoClinicaMedica\\back\\obj\\",
+      "projectPath": "C:\\data\\Clinicamedica\\back\\AnalisisIClinicaMedicaBack.csproj",
+      "packagesPath": "C:\\Users\\asijt\\.nuget\\packages\\",
+      "outputPath": "C:\\data\\Clinicamedica\\back\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jrgj5\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\asijt\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -857,11 +857,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -896,7 +891,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
