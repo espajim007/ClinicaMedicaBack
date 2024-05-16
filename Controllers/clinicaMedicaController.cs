@@ -1240,11 +1240,11 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             {
                 var query = @"SELECT id_departamento, nombre
                      FROM departamento 
-                     ORDER BY id_deparamento";
+                     ORDER BY id_departamento";
                 var resultado = db.ExecuteQuery(query);
                 var departamentos = resultado.AsEnumerable().Select(row => new departamentoModel
                 {
-                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    id_departamento = Convert.ToInt32(row["id_departamento"]),
                     nombre = row["nombre"].ToString()
                 }).ToList();
                 return Ok(departamentos);
