@@ -3,6 +3,7 @@
     public class direccionModel
     {
         public int? id_direccion { get; set; }
+        public int? id_departamento { get; set; }
         public int? id_municipio { get; set; }
         public string? calle { get; set; }
         public string? avenida { get; set; }

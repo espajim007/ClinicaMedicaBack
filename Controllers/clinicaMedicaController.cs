@@ -1318,7 +1318,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 var municipios = resultado.AsEnumerable().Select(row => new municipioModel
                 {
                     id_municipio = Convert.ToInt32(row["id_municipio"]),
-                    id_departamento = Convert.ToInt32(row["id_deparamento"]),
+                    id_departamento = Convert.ToInt32(row["id_departamento"]),
                     nombre = row["nombre"].ToString()
                 }).ToList();
                 return Ok(municipios);
