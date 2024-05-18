@@ -86,7 +86,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             progra = new Progra(configuration);
         }
 
-       
+
 
         [HttpPost("sesion")]
         public IActionResult sesion([FromBody] Sesion sesion)
@@ -121,7 +121,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 // En caso de error, devolver un BadRequest con el mensaje de error
                 return BadRequest($"Error al autenticar al usuario: {ex.Message}");
             }
-            }
+        }
 
         [HttpPost("registro")]
         public IActionResult Register([FromBody] registro_usuario registro)
@@ -208,10 +208,10 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                    var queryInsertar = $"INSERT INTO aseguradora (nombre,copago,telefono, Correo) " +
-                    $"VALUES ( '{aseguradora.nombre}', '{aseguradora.copago}', '{aseguradora.telefono}', '{aseguradora.Correo}')";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
+                var queryInsertar = $"INSERT INTO aseguradora (nombre,copago,telefono, Correo) " +
+                $"VALUES ( '{aseguradora.nombre}', '{aseguradora.copago}', '{aseguradora.telefono}', '{aseguradora.Correo}')";
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
 
             }
             catch (Exception ex)
@@ -408,11 +408,11 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                    var queryInsertar = $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda, indicacion_extra) VALUES" +
-                        $" ( '{direccion.id_municipio}',{direccion.calle}',{direccion.avenida}',{direccion.zona_barrio}',{direccion.residencial_colonia}')," +
-                        $"'{direccion.numero_vivienda}',{direccion.indicacion_extra}'";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
+                var queryInsertar = $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda, indicacion_extra) VALUES" +
+                 $" ('{direccion.id_municipio}', '{direccion.calle}', '{direccion.avenida}', '{direccion.zona_barrio}', '{direccion.residencial_colonia}', '{direccion.numero_vivienda}', '{direccion.indicacion_extra}')";
+
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
 
             }
             catch (Exception ex)
@@ -1515,7 +1515,135 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
 
         }
-        
+
+        //---------------------------------------PUESTO
+        [HttpGet("catalogos/puesto")]
+        public IActionResult GetPuesto()
+        {
+            try
+            {
+                var query = @"SELECT id_puesto_empleados, nombre, decripcion
+                     FROM puesto 
+                     ORDER BY id_puesto_empleados";
+                var resultado = db.ExecuteQuery(query);
+                var puestos = resultado.AsEnumerable().Select(row => new puestoModel
+                {
+                    id_puesto_empleados = Convert.ToInt32(row["id_puesto_empleados"]),
+                    nombre = row["nombre"].ToString(),
+                    decripcion = row["decripcion"].ToString(),
+                }).ToList();
+                return Ok(puestos);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+        [HttpPost("catalogos/editar-puesto")]
+        public IActionResult Editarpuesto([FromBody] puestoModel puesto)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE puesto SET nombre = '{puesto.nombre}', decripcion = '{puesto.decripcion}'" +
+                $" WHERE id_puesto_empleados = {puesto.id_puesto_empleados}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nuevo-puesto")]
+        public IActionResult NuevoPuesto([FromBody] puestoModel puesto)
+        {
+            try
+            {
+                var queryInsertar = $"INSERT INTO puesto (nombre,decripcion) " +
+                $"VALUES ( '{puesto.nombre}', '{puesto.decripcion}')";
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
+
+        //---------------------------------------RelacionPaciente
+        [HttpGet("catalogos/relacion-paciente")]
+        public IActionResult GetRelacion()
+        {
+            try
+            {
+                var query = @"SELECT id_relacion_paciente, relacion
+                        FROM relacion_paciente 
+                     ORDER BY id_relacion_paciente";
+                var resultado = db.ExecuteQuery(query);
+                var relaciones = resultado.AsEnumerable().Select(row => new relacionPacienteModel
+                {
+                    id_relacion_paciente = Convert.ToInt32(row["id_relacion_paciente"]),
+                    relacion = row["relacion"].ToString()
+                }).ToList();
+                return Ok(relaciones);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
+
+        [HttpPost("catalogos/editar-relacion-paciente")]
+        public IActionResult EditarRelacionPaciente([FromBody] relacionPacienteModel relacion)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE relacion_paciente SET relacion = '{relacion.relacion}'" +
+                $" WHERE id_relacion_paciente = {relacion.id_relacion_paciente}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-relacion-paciente")]
+        public IActionResult NuevoPuesto([FromBody] relacionPacienteModel relacion)
+        {
+            try
+            {
+                var queryInsertar = $"INSERT INTO relacion_paciente (relacion) " +
+                $"VALUES ( '{relacion.relacion}')";
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
     }
 }
 
