@@ -1,12 +1,9 @@
 ﻿namespace AnalisisIClinicaMedicaBack.Requests
 {
-    public class agregaryeditarExpedienteRequest
+    public class editarFichapacienteRequest
     {
-        //Tabla Expediente
-        public int? id_expediente { get; set; }
-        public int? paciente_id_paciente { get; set; }
-        public DateTime? fecha_creacion { get; set; }
-        //Tabla ficha_Paciente
+        //Tabla ficha_paciente
+        public int? id_ficha_paciente { get; set; }
         public int? aseguradora_id_aseguradora { get; set; }
         public int? id_contacto_emergencia { get; set; }
         public int? id_direccion { get; set; }
@@ -29,18 +26,18 @@
         public double? copago { get; set; }
         public int? telefono_aseguradora { get; set; }
         public string? Correo_aseguradora { get; set; }
-        //Tabla contacto_emergencia
+        //Tabla contacto de emergencia
         public int? id_relacion_paciente { get; set; }
         public string? primer_nombre_contacoe { get; set; }
         public string? segundo_nombre_contactoe { get; set; }
         public string? primer_apellido_contactoe { get; set; }
         public string? segundo_apellido_contactoe { get; set; }
         public int? telefono_contactoe { get; set; }
-        //Tabla relacion
+        //Tabla relacion paciente
         public string? relacion { get; set; }
-        //Tabla genero de contacto emergencia
+        //Tabla genero contacto de emergencia
         public string? genero_contactoe { get; set; }
-        //Tabla direccion de ficha paciente
+        //Tabla direccion
         public int? id_municipio { get; set; }
         public string? calle { get; set; }
         public string? avenida { get; set; }
@@ -50,7 +47,7 @@
         public string? indicacion_extra { get; set; }
         //Tabla municipio
         public int? id_departamento { get; set; }
-        public string? nombre_municpio { get; set; }
+        public string? nombre_municipio { get; set; }
         //Tabla departamento
         public string? nombre_departamento { get; set; }
         //Tabla tipo de sangre

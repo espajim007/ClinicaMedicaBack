@@ -495,104 +495,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
-        //---------------------------------------fichaPaciente
-        [HttpGet("catalogos/ficha-paciente")]
-        public IActionResult GetFichaPaciente()
-        {
-            try
-            {
-                var query = @"SELECT id_ficha_paciente, aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion,
-                id_tipo_sangre, id_ocupacion, genero_idgenero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, 
-                segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones
-                     FROM ficha_paciente 
-                     ORDER BY id_ficha_paciente";
-                var resultado = db.ExecuteQuery(query);
-                var fichas = resultado.AsEnumerable().Select(row => new fichaPacienteModel
-                {
-                    id_ficha_paciente = Convert.ToInt32(row["id_ficha_paciente"]),
-                    aseguradora_id_aseguradora = Convert.ToInt32(row["aseguradora_id_aseguradora"]),
-                    id_contacto_emergencia = Convert.ToInt32(row["id_contacto_emergencia"]),
-                    id_direccion = Convert.ToInt32(row["id_direccion"]),
-                    id_tipo_sangre = Convert.ToInt32(row["id_tipo_sangre"]),
-                    id_ocupacion = Convert.ToInt32(row["id_ocupacion"]),
-                    genero_idgenero = Convert.ToInt32(row["genero_idgenero"]),
-                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
-                    primer_nombre = row["primer_nombre"].ToString(),
-                    segundo_nombre = row["segundo_nombre"].ToString(),
-                    primer_apellido = row["primer_apellido"].ToString(),
-                    segundo_apellido = row["segundo_apellido"].ToString(),
-                    DPI = row["DPI"].ToString(),
-                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
-                    telefono = Convert.ToInt32(row["telefono"]),
-                    correo_electronico = row["correo_electronico"].ToString(),
-                    NIT = row["NIT"].ToString(),
-                    observaciones = row["observaciones"].ToString()
-                }).ToList();
-                return Ok(fichas);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-
-        [HttpPost("catalogos/editar-ficha-paciente")]
-        public IActionResult EditarFichaPaciente([FromBody] fichaPacienteModel fichaPaciente)
-        {
-            try
-            {
-                var queryActualizar = $"UPDATE ficha_paciente SET aseguradora_id_aseguradora = '{fichaPaciente.aseguradora_id_aseguradora}', id_contacto_emergencia = '{fichaPaciente.id_contacto_emergencia}', " +
-                $" id_direccion = '{fichaPaciente.id_direccion}', id_tipo_sangre = '{fichaPaciente.id_tipo_sangre}', id_ocupacion = '{fichaPaciente.id_ocupacion}', genero_idgenero = '{fichaPaciente.genero_idgenero}'," +
-                $" id_estado_civil = '{fichaPaciente.id_estado_civil}', primer_nombre = '{fichaPaciente.primer_nombre}', segundo_nombre = '{fichaPaciente.segundo_nombre}'," +
-                $" primer_apellido = '{fichaPaciente.primer_apellido}', segundo_apellido = '{fichaPaciente.segundo_apellido}', DPI = '{fichaPaciente.DPI}', fecha_nacimiento = '{fichaPaciente.fecha_nacimiento}', " +
-                $" telefono = '{fichaPaciente.telefono}', correo_electronico = '{fichaPaciente.correo_electronico}', NIT = '{fichaPaciente.NIT}', observaciones = '{fichaPaciente.observaciones}'" +
-                $" WHERE id_ficha_paciente = {fichaPaciente.id_ficha_paciente}";
-                var actualizar = db.ExecuteQuery(queryActualizar);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-
-
-        }
-
-        [HttpPost("catalogos/nueva-ficha-paciente")]
-        public IActionResult NuevoExpediente([FromBody] fichaPacienteModel ficha)
-        {
-            try
-            {
-                // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT DPI FROM ficha_paciente WHERE DPI = '{ficha.DPI}'";
-                var resultadoValidador = db.ExecuteQuery(queryValidador);
-
-                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
-                {
-                    var queryInsertar = $"INSERT INTO ficha_paciente ( aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion, id_tipo_sangre, id_ocupacion, genero_idgenero, " +
-                        $"id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones) " +
-                        $"VALUES ( '{ficha.aseguradora_id_aseguradora}', '{ficha.id_contacto_emergencia}', '{ficha.id_direccion}', '{ficha.id_tipo_sangre}', '{ficha.id_ocupacion}', " +
-                        $"'{ficha.genero_idgenero}', '{ficha.id_estado_civil}'" +
-                        $", '{ficha.primer_nombre}', '{ficha.segundo_nombre}', '{ficha.primer_apellido}', '{ficha.segundo_apellido}', '{ficha.DPI}', '{ficha.fecha_nacimiento}'," +
-                        $", '{ficha.telefono}', '{ficha.correo_electronico}', '{ficha.NIT}', '{ficha.observaciones}')";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
-                }
-                else
-                {
-                    // El usuario ya existe, devolver un BadRequest
-                    return BadRequest("Ya esta registrado ese paciente");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-        }
+       
 
         //-------------------------------------------empleado
 
@@ -631,62 +534,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 return BadRequest(ex);
             }
         }
-
-        [HttpPost("catalogos/editar-empleado")]
-        public IActionResult EditarEmpleado([FromBody] empleadoModel empleado)
-        {
-            try
-            {
-                var queryActualizar = $"UPDATE empleado SET id_direccion = '{empleado.id_direccion}', id_genero = '{empleado.id_genero}', id_estado_civil = '{empleado.id_estado_civil}', primer_nombre = '{empleado.primer_nombre}'," +
-                $" segundo_nombre = '{empleado.segundo_nombre}', primer_apellido = '{empleado.primer_apellido}', segundo_apellido = '{empleado.segundo_apellido}', DPI = '{empleado.DPI}', fecha_nacimiento = '{empleado.fecha_nacimiento}'," +
-                $" telefono = '{empleado.telefono}', correo_electronico = '{empleado.correo_electronico}', fecha_contratacion = '{empleado.fecha_contratacion}'" +
-                $" WHERE id_empleado = {empleado.id_empleado}";
-                var actualizar = db.ExecuteQuery(queryActualizar);
-
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-
-
-        }
-
-        [HttpPost("catalogos/nuevo-empleado")]
-        public IActionResult NuevoEmpleado([FromBody] empleadoModel empleado)
-        {
-            try
-            {
-                // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT DPI FROM empleado WHERE DPI = '{empleado.DPI}'";
-                var resultadoValidador = db.ExecuteQuery(queryValidador);
-
-                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
-                {
-                    var queryInsertar = $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
-                        $" segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
-                        $"VALUES ( '{empleado.id_direccion}', '{empleado.id_genero}', '{empleado.id_estado_civil}', '{empleado.primer_nombre}', '{empleado.segundo_nombre}', " +
-                        $", '{empleado.primer_apellido}', '{empleado.segundo_apellido}', '{empleado.DPI}', '{empleado.fecha_nacimiento}', '{empleado.telefono}', " +
-                        $", '{empleado.correo_electronico}', '{empleado.fecha_contratacion}')";
-                    db.ExecuteQuery(queryInsertar);
-                    return Ok();
-                }
-                else
-                {
-                    // El usuario ya existe, devolver un BadRequest
-                    return BadRequest("Ya esta registrado ese empleado");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                // En caso de error, devolver un BadRequest con el mensaje de error
-                return BadRequest(ex.Message);
-            }
-        }
-
+       
         //-------------------------------------------especialidad
 
         [HttpGet("catalogos/especialidad")]
@@ -1132,7 +980,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             try
             {
                 // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT nombre FROM ocupacion WHERE id_medico = '{ocupacion.nombre}'";
+                var queryValidador = $"SELECT nombre FROM ocupacion WHERE nombre = '{ocupacion.nombre}'";
                 var resultadoValidador = db.ExecuteQuery(queryValidador);
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
@@ -1626,7 +1474,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         }
 
         [HttpPost("catalogos/nueva-relacion-paciente")]
-        public IActionResult NuevoPuesto([FromBody] relacionPacienteModel relacion)
+        public IActionResult NuevaReakcion([FromBody] relacionPacienteModel relacion)
         {
             try
             {
@@ -1642,6 +1490,349 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 return BadRequest(ex.Message);
 
 
+            }
+        }
+
+        [HttpPost("catalogos/Editar-empleado")]
+        public IActionResult editarEmpleado([FromBody] agregaryeditarEmpleado empleado)
+        {
+            try
+            {
+                var queryInsertar = "START TRANSACTION;" +
+                    $"UPDATE empleado SET id_genero = '{empleado.id_genero}', " +
+                    $"id_estado_civil = '{empleado.id_estado_civil}', " +
+                    $"primer_nombre = '{empleado.primer_nombre}', " +
+                    $"segundo_nombre = '{empleado.segundo_nombre}', " +
+                    $"primer_apellido = '{empleado.primer_apellido}', " +
+                    $"segundo_apellido  = '{empleado.segundo_apellido}'', " +
+                    $"DPI  = '{empleado.DPI}' ," +
+                    $"fecha_nacimiento  = '{empleado.fecha_nacimiento}', " +
+                    $"telefono  = '{empleado.telefono}', " +
+                    $"correo_electronico  = '{empleado.correo_electronico}', " +
+                    $"fecha_contratacion  = '{empleado.fecha_contratacion}' WHERE id_empleado = '{empleado.id_empleado}';" +
+                    
+                    $"UPDATE direccion SET id_municipio = '{empleado.id_municipio}', " +
+                    $"calle = '{empleado.calle}', " +
+                    $"avenida = '{empleado.avenida}', " +
+                    $"zona_barrio = '{empleado.zona_barrio}', " +
+                    $"resicencial_colonia = '{empleado.residencial_colonia}', " +
+                    $"numero_vivienda = '{empleado.numero_vivienda}', " +
+                    $"indicacion_extra = '{empleado.indicacion_extra}', " +
+                    $"WHERE id_direccion = '{empleado.id_direccion}';" +
+                $"COMMIT;";
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
+
+        [HttpPost("catalogos/nuevo-empleado")]
+        public IActionResult nuevoEmpleado([FromBody] agregaryeditarEmpleado empleado)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT DPI FROM empleado WHERE DPI = '{empleado.DPI}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"START TRANSACTION; " +
+                        $"DECLARE @idDireccion INT;" +
+
+                        $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda," +
+                        $" indicacion_extra) VALUES " +
+                        $" ('{empleado.id_municipio}', '{empleado.calle}', '{empleado.avenida}', " +
+                        $"'{empleado.zona_barrio}', '{empleado.residencial_colonia}', '{empleado.numero_vivienda}', " +
+                        $"'{empleado.indicacion_extra}');" +
+
+                        $"SELECT @idDireccion = MAX(id_direccion) FROM direccion;" +
+
+                        $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
+                        $" segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
+                        $"VALUES ( @idDireccion, '{empleado.id_genero}', '{empleado.id_estado_civil}', '{empleado.primer_nombre}', " +
+                        $"'{empleado.segundo_nombre}', " +
+                        $"'{empleado.primer_apellido}', '{empleado.segundo_apellido}', '{empleado.DPI}', '{empleado.fecha_nacimiento}', " +
+                        $"'{empleado.telefono}', '{empleado.correo_electronico}', '{empleado.fecha_contratacion}');" +
+                        $"COMMIT;";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese empleado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
+
+        [HttpPost("catalogos/editar-medico")]
+        public IActionResult editarMedico([FromBody] agregaryeditarMedicoRequest medico)
+        {
+            try
+            {
+                var queryInsertar = "START TRANSACTION;" +
+                    $"UPDATE medico SET colegiado = '{medico.colegiado}', " +
+                    $"WHERE id_medico = '{medico.id_medico}';" +
+
+                    $"UPDATE medico SET id_genero = '{medico.id_genero}', " +
+                    $"id_estado_civil = '{medico.id_estado_civil}', " +
+                    $"primer_nombre = '{medico.primer_nombre}', " +
+                    $"segundo_nombre = '{medico.segundo_nombre}', " +
+                    $"primer_apellido = '{medico.primer_apellido}', " +
+                    $"segundo_apellido  = '{medico.segundo_apellido}'', " +
+                    $"DPI  = '{medico.DPI}' ," +
+                    $"fecha_nacimiento  = '{medico.fecha_nacimiento}', " +
+                    $"telefono  = '{medico.telefono}', " +
+                    $"correo_electronico  = '{medico.correo_electronico}', " +
+                    $"fecha_contratacion  = '{medico.fecha_contratacion}' " +
+                    $"WHERE id_empleado = '{medico.id_empleado}';" +
+
+                    $"UPDATE direccion SET id_municipio = '{medico.id_municipio}', " +
+                    $"calle = '{medico.calle}', " +
+                    $"avenida = '{medico.avenida}', " +
+                    $"zona_barrio = '{medico.zona_barrio}', " +
+                    $"resicencial_colonia = '{medico.residencial_colonia}', " +
+                    $"numero_vivienda = '{medico.numero_vivienda}', " +
+                    $"indicacion_extra = '{medico.indicacion_extra}', " +
+                    $"WHERE id_direccion = '{medico.id_direccion}';" +
+                $"COMMIT;";
+                db.ExecuteQuery(queryInsertar);
+                return Ok();
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
+
+        [HttpPost("catalogos/nuevo-medico")]
+        public IActionResult nuevoMedico([FromBody] agregaryeditarMedicoRequest medico)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT DPI FROM empleado WHERE DPI = '{medico.DPI}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"START TRANSACTION; " +
+                        $"DECLARE @idDireccion INT, @idEmpleado INT;" +
+
+                        $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda," +
+                        $" indicacion_extra) VALUES " +
+                        $" ('{medico.id_municipio}', '{medico.calle}', '{medico.avenida}', " +
+                        $"'{medico.zona_barrio}', '{medico.residencial_colonia}', '{medico.numero_vivienda}', " +
+                        $"'{medico.indicacion_extra}');" +
+
+                        $"SELECT @idDireccion = MAX(id_direccion) FROM direccion;" +
+
+                        $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
+                        $" segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
+                        $"VALUES ( @idDireccion, '{medico.id_genero}', '{medico.id_estado_civil}', '{medico.primer_nombre}', " +
+                        $"'{medico.segundo_nombre}', " +
+                        $"'{medico.primer_apellido}', '{medico.segundo_apellido}', '{medico.DPI}', '{medico.fecha_nacimiento}', " +
+                        $"'{medico.telefono}', '{medico.correo_electronico}', '{medico.fecha_contratacion}');" +
+
+                        $"SELECT @idEmpleado = MAX(id_empleado) FROM empleado;" +
+
+                        $"INSERT INTO medico (colegiado, id_empleado)" +
+                        $" ('{medico.id_municipio}', @idEmpleado);" +
+
+                        $"COMMIT;";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese empleado");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+
+
+            }
+        }
+
+        //---------------------------------------fichaPaciente
+        [HttpGet("catalogos/ficha-paciente")]
+        public IActionResult GetFichaPaciente(int idUsuario)
+        {
+            try
+            {
+                var query = @"SELECT id_ficha_paciente, aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion,
+                id_tipo_sangre, id_ocupacion, genero_idgenero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, 
+                segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones
+                     FROM ficha_paciente 
+                     ORDER BY id_ficha_paciente";
+                var resultado = db.ExecuteQuery(query);
+                var fichas = resultado.AsEnumerable().Select(row => new agregarExpedienteRequest
+                {
+                    paciente_id_paciente = Convert.ToInt32(row["id_ficha_paciente"]),
+                    aseguradora_id_aseguradora = Convert.ToInt32(row["aseguradora_id_aseguradora"]),
+                    id_contacto_emergencia = Convert.ToInt32(row["id_contacto_emergencia"]),
+                    id_direccion = Convert.ToInt32(row["id_direccion"]),
+                    id_tipo_sangre = Convert.ToInt32(row["id_tipo_sangre"]),
+                    id_ocupacion = Convert.ToInt32(row["id_ocupacion"]),
+                    genero_idgenero = Convert.ToInt32(row["genero_idgenero"]),
+                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
+                    primer_nombre = row["primer_nombre"].ToString(),
+                    segundo_nombre = row["segundo_nombre"].ToString(),
+                    primer_apellido = row["primer_apellido"].ToString(),
+                    segundo_apellido = row["segundo_apellido"].ToString(),
+                    DPI = row["DPI"].ToString(),
+                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
+                    telefono = Convert.ToInt32(row["telefono"]),
+                    correo_electronico = row["correo_electronico"].ToString(),
+                    NIT = row["NIT"].ToString(),
+                    observaciones = row["observaciones"].ToString()
+                }).ToList();
+                return Ok(fichas);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
+
+        [HttpPost("catalogos/editar-ficha-paciente")]
+        public IActionResult EditarFichaPaciente([FromBody] fichaPacienteModel fichaPaciente)
+        {
+            try
+            {
+                var queryActualizar = $"UPDATE ficha_paciente SET aseguradora_id_aseguradora = '{fichaPaciente.aseguradora_id_aseguradora}', id_contacto_emergencia = '{fichaPaciente.id_contacto_emergencia}', " +
+                $" id_direccion = '{fichaPaciente.id_direccion}', id_tipo_sangre = '{fichaPaciente.id_tipo_sangre}', id_ocupacion = '{fichaPaciente.id_ocupacion}', genero_idgenero = '{fichaPaciente.genero_idgenero}'," +
+                $" id_estado_civil = '{fichaPaciente.id_estado_civil}', primer_nombre = '{fichaPaciente.primer_nombre}', segundo_nombre = '{fichaPaciente.segundo_nombre}'," +
+                $" primer_apellido = '{fichaPaciente.primer_apellido}', segundo_apellido = '{fichaPaciente.segundo_apellido}', DPI = '{fichaPaciente.DPI}', fecha_nacimiento = '{fichaPaciente.fecha_nacimiento}', " +
+                $" telefono = '{fichaPaciente.telefono}', correo_electronico = '{fichaPaciente.correo_electronico}', NIT = '{fichaPaciente.NIT}', observaciones = '{fichaPaciente.observaciones}'" +
+                $" WHERE id_ficha_paciente = {fichaPaciente.id_ficha_paciente}";
+                var actualizar = db.ExecuteQuery(queryActualizar);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+
+
+        }
+
+        [HttpPost("catalogos/nueva-ficha-paciente")]
+        public IActionResult NuevaFichaPaciente([FromBody] fichaPacienteModel ficha)
+        {
+            try
+            {
+                // Verificar si el usuario ya existe en la base de datos
+                var queryValidador = $"SELECT DPI FROM ficha_paciente WHERE DPI = '{ficha.DPI}'";
+                var resultadoValidador = db.ExecuteQuery(queryValidador);
+
+                if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
+                {
+                    var queryInsertar = $"INSERT INTO ficha_paciente ( aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion, id_tipo_sangre, id_ocupacion, genero_idgenero, " +
+                        $"id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones) " +
+                        $"VALUES ( '{ficha.aseguradora_id_aseguradora}', '{ficha.id_contacto_emergencia}', '{ficha.id_direccion}', '{ficha.id_tipo_sangre}', '{ficha.id_ocupacion}', " +
+                        $"'{ficha.genero_idgenero}', '{ficha.id_estado_civil}'" +
+                        $", '{ficha.primer_nombre}', '{ficha.segundo_nombre}', '{ficha.primer_apellido}', '{ficha.segundo_apellido}', '{ficha.DPI}', '{ficha.fecha_nacimiento}'," +
+                        $", '{ficha.telefono}', '{ficha.correo_electronico}', '{ficha.NIT}', '{ficha.observaciones}')";
+                    db.ExecuteQuery(queryInsertar);
+                    return Ok();
+                }
+                else
+                {
+                    // El usuario ya existe, devolver un BadRequest
+                    return BadRequest("Ya esta registrado ese paciente");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, devolver un BadRequest con el mensaje de error
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("catalogos/medico-id/{id_medico}")]
+        public IActionResult GetEmpleados(int id_medico)
+        {
+            try
+            {
+                var query = @"SELECT a.id_medico, a.colegiado, a.id_empleado, b.especialidad_id_especialidad, c.id_especialidad, d.id_genero, 
+                            d.id_estado_civil, d.primer_nombre, d.segundo_nombre, d.primer_apellido, d.segundo_apellido, d.DPI, d.fecha_nacimiento,d.telefono, 
+                            d.correo_electronico, d.fecha_contratacion, e.id_direccion, e.id_municipio, g.id_departamento, e.calle, e.avenida, e.zona_barrio,
+                            e.residencial_colonia, e.numero_vivienda, e.indicacion_extra
+                        FROM medico a
+                        INNER JOIN medico_especialidad b ON a.id_medico = b.id_medico
+                        INNER JOIN especialidad c ON b.especialidad_id_especialidad = c.id_especialidad
+                        INNER JOIN empleado d ON a.id_empleado = d.id_empleado
+                        INNER JOIN direccion e ON d.id_direccion = e.id_direccion
+                        INNER JOIN municipio f ON e.id_municipio = f.id_municipio
+                        INNER JOIN departamento g ON f.id_departamento = g.id_departamento
+                        WHERE a.id_medico = "+id_medico+"";
+                var resultado = db.ExecuteQuery(query);
+                var medico = resultado.AsEnumerable().Select(row => new agregaryeditarMedicoRequest
+                {
+                    id_medico = Convert.ToInt32(row["id_medico"]),
+                    colegiado = Convert.ToInt32(row["colegiado"]),
+                    id_empleado = Convert.ToInt32(row["id_empleado"]),
+                    especialidad_id_especialidad = Convert.ToInt32(row["especialidad_id_especialidad"]),
+                    id_especialidad = Convert.ToInt32(row["id_especialidad"]),
+                    id_genero = Convert.ToInt32(row["id_genero"]),
+                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
+                    primer_nombre = row["primer_nombre"]?.ToString(),
+                    segundo_nombre = row["segundo_nombre"]?.ToString(),
+                    primer_apellido = row["primer_apellido"]?.ToString(),
+                    segundo_apellido = row["segundo_apellido"]?.ToString(),
+                    DPI = row["DPI"]?.ToString(),
+                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
+                    telefono = row["telefono"] as int?,
+                    correo_electronico = row["correo_electronico"]?.ToString(),
+                    fecha_contratacion = ((DateTime)row["fecha_contratacion"]).Date,
+                    id_direccion = Convert.ToInt32(row["id_direccion"]),
+                    id_municipio = Convert.ToInt32(row["id_municipio"]),
+                    id_departamento = Convert.ToInt32(row["id_departamento"]),
+                    calle = row["calle"]?.ToString(),
+                    avenida = row["avenida"]?.ToString(),
+                    zona_barrio = row["zona_barrio"]?.ToString(),
+                    residencial_colonia = row["residencial_colonia"]?.ToString(),
+                    numero_vivienda = row["numero_vivienda"]?.ToString(),
+                    indicacion_extra = row["indicacion_extra"]?.ToString(),
+
+                }).ToList();
+                return Ok(medico);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
             }
         }
     }
