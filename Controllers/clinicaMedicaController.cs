@@ -506,7 +506,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             {
                 var query = @"SELECT id_empleado, id_direccion, id_genero, id_estado_civil, 
                                     primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, 
-                                    DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion
+                                    identif, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion
                               FROM empleado 
                               ORDER BY id_empleado";
                 var resultado = db.ExecuteQuery(query);
@@ -520,7 +520,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     segundo_nombre = row["segundo_nombre"]?.ToString(),
                     primer_apellido = row["primer_apellido"]?.ToString(),
                     segundo_apellido = row["segundo_apellido"]?.ToString(),
-                    DPI = row["DPI"]?.ToString(),
+                    DPI = row["identif"]?.ToString(),
                     fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
                     telefono = row["telefono"] as int?,
                     correo_electronico = row["correo_electronico"]?.ToString(),
@@ -1596,7 +1596,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     $"segundo_nombre = '{medico.segundo_nombre}', " +
                     $"primer_apellido = '{medico.primer_apellido}', " +
                     $"segundo_apellido  = '{medico.segundo_apellido}'', " +
-                    $"DPI  = '{medico.DPI}' ," +
+                    $"identif  = '{medico.identif}' ," +
                     $"fecha_nacimiento  = '{medico.fecha_nacimiento}', " +
                     $"telefono  = '{medico.telefono}', " +
                     $"correo_electronico  = '{medico.correo_electronico}', " +
@@ -1631,7 +1631,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             try
             {
                 // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT DPI FROM empleado WHERE DPI = '{medico.DPI}'";
+                var queryValidador = $"SELECT DPI FROM empleado WHERE identif = '{medico.identif}'";
                 var resultadoValidador = db.ExecuteQuery(queryValidador);
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
@@ -1648,10 +1648,10 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                         $"SELECT @idDireccion = MAX(id_direccion) FROM direccion;" +
 
                         $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
-                        $" segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
+                        $" segundo_apellido, identif, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
                         $"VALUES ( @idDireccion, '{medico.id_genero}', '{medico.id_estado_civil}', '{medico.primer_nombre}', " +
                         $"'{medico.segundo_nombre}', " +
-                        $"'{medico.primer_apellido}', '{medico.segundo_apellido}', '{medico.DPI}', '{medico.fecha_nacimiento}', " +
+                        $"'{medico.primer_apellido}', '{medico.segundo_apellido}', '{medico.identif}', '{medico.fecha_nacimiento}', " +
                         $"'{medico.telefono}', '{medico.correo_electronico}', '{medico.fecha_contratacion}');" +
 
                         $"SELECT @idEmpleado = MAX(id_empleado) FROM empleado;" +
@@ -1782,52 +1782,58 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         }
 
         [HttpGet("catalogos/medico-id/{id_medico}")]
-        public IActionResult GetEmpleados(int id_medico)
+        public IActionResult GetEmpleado(int id_medico)
         {
             try
             {
                 var query = @"SELECT a.id_medico, a.colegiado, a.id_empleado, b.especialidad_id_especialidad, c.id_especialidad, d.id_genero, 
-                            d.id_estado_civil, d.primer_nombre, d.segundo_nombre, d.primer_apellido, d.segundo_apellido, d.DPI, d.fecha_nacimiento,d.telefono, 
-                            d.correo_electronico, d.fecha_contratacion, e.id_direccion, e.id_municipio, g.id_departamento, e.calle, e.avenida, e.zona_barrio,
-                            e.residencial_colonia, e.numero_vivienda, e.indicacion_extra
-                        FROM medico a
-                        INNER JOIN medico_especialidad b ON a.id_medico = b.id_medico
-                        INNER JOIN especialidad c ON b.especialidad_id_especialidad = c.id_especialidad
-                        INNER JOIN empleado d ON a.id_empleado = d.id_empleado
-                        INNER JOIN direccion e ON d.id_direccion = e.id_direccion
-                        INNER JOIN municipio f ON e.id_municipio = f.id_municipio
-                        INNER JOIN departamento g ON f.id_departamento = g.id_departamento
-                        WHERE a.id_medico = "+id_medico+"";
-                var resultado = db.ExecuteQuery(query);
-                var medico = resultado.AsEnumerable().Select(row => new agregaryeditarMedicoRequest
-                {
-                    id_medico = Convert.ToInt32(row["id_medico"]),
-                    colegiado = Convert.ToInt32(row["colegiado"]),
-                    id_empleado = Convert.ToInt32(row["id_empleado"]),
-                    especialidad_id_especialidad = Convert.ToInt32(row["especialidad_id_especialidad"]),
-                    id_especialidad = Convert.ToInt32(row["id_especialidad"]),
-                    id_genero = Convert.ToInt32(row["id_genero"]),
-                    id_estado_civil = Convert.ToInt32(row["id_estado_civil"]),
-                    primer_nombre = row["primer_nombre"]?.ToString(),
-                    segundo_nombre = row["segundo_nombre"]?.ToString(),
-                    primer_apellido = row["primer_apellido"]?.ToString(),
-                    segundo_apellido = row["segundo_apellido"]?.ToString(),
-                    DPI = row["DPI"]?.ToString(),
-                    fecha_nacimiento = ((DateTime)row["fecha_nacimiento"]).Date,
-                    telefono = row["telefono"] as int?,
-                    correo_electronico = row["correo_electronico"]?.ToString(),
-                    fecha_contratacion = ((DateTime)row["fecha_contratacion"]).Date,
-                    id_direccion = Convert.ToInt32(row["id_direccion"]),
-                    id_municipio = Convert.ToInt32(row["id_municipio"]),
-                    id_departamento = Convert.ToInt32(row["id_departamento"]),
-                    calle = row["calle"]?.ToString(),
-                    avenida = row["avenida"]?.ToString(),
-                    zona_barrio = row["zona_barrio"]?.ToString(),
-                    residencial_colonia = row["residencial_colonia"]?.ToString(),
-                    numero_vivienda = row["numero_vivienda"]?.ToString(),
-                    indicacion_extra = row["indicacion_extra"]?.ToString(),
+                     d.id_estado_civil, d.primer_nombre, d.segundo_nombre, d.primer_apellido, d.segundo_apellido, d.identif, d.fecha_nacimiento, d.telefono, 
+                     d.correo_electronico, d.fecha_contratacion, e.id_direccion, e.id_municipio, g.id_departamento, e.calle, e.avenida, e.zona_barrio,
+                     e.residencial_colonia, e.numero_vivienda, e.indicacion_extra
+                 FROM medico a
+                 INNER JOIN medico_especialidad b ON a.id_medico = b.id_medico
+                 INNER JOIN especialidad c ON b.especialidad_id_especialidad = c.id_especialidad
+                 INNER JOIN empleado d ON a.id_empleado = d.id_empleado
+                 INNER JOIN direccion e ON d.id_direccion = e.id_direccion
+                 INNER JOIN municipio f ON e.id_municipio = f.id_municipio
+                 INNER JOIN departamento g ON f.id_departamento = g.id_departamento
+                 WHERE a.id_medico = " + id_medico + "";
+                var resultado = db.ExecuteQuery(query).AsEnumerable().FirstOrDefault();
 
-                }).ToList();
+                if (resultado == null)
+                {
+                    return NotFound();
+                }
+
+                var medico = new agregaryeditarMedicoRequest
+                {
+                    id_medico = Convert.ToInt32(resultado["id_medico"]),
+                    colegiado = Convert.ToInt32(resultado["colegiado"]),
+                    id_empleado = Convert.ToInt32(resultado["id_empleado"]),
+                    especialidad_id_especialidad = Convert.ToInt32(resultado["especialidad_id_especialidad"]),
+                    id_especialidad = Convert.ToInt32(resultado["id_especialidad"]),
+                    id_genero = Convert.ToInt32(resultado["id_genero"]),
+                    id_estado_civil = Convert.ToInt32(resultado["id_estado_civil"]),
+                    primer_nombre = resultado["primer_nombre"]?.ToString(),
+                    segundo_nombre = resultado["segundo_nombre"]?.ToString(),
+                    primer_apellido = resultado["primer_apellido"]?.ToString(),
+                    segundo_apellido = resultado["segundo_apellido"]?.ToString(),
+                    identif = Convert.ToInt64(resultado["identif"]),
+                    fecha_nacimiento = ((DateTime)resultado["fecha_nacimiento"]).Date,
+                    telefono = resultado["telefono"] as int?,
+                    correo_electronico = resultado["correo_electronico"]?.ToString(),
+                    fecha_contratacion = ((DateTime)resultado["fecha_contratacion"]).Date,
+                    id_direccion = Convert.ToInt32(resultado["id_direccion"]),
+                    id_municipio = Convert.ToInt32(resultado["id_municipio"]),
+                    id_departamento = Convert.ToInt32(resultado["id_departamento"]),
+                    calle = resultado["calle"]?.ToString(),
+                    avenida = resultado["avenida"]?.ToString(),
+                    zona_barrio = resultado["zona_barrio"]?.ToString(),
+                    residencial_colonia = resultado["residencial_colonia"]?.ToString(),
+                    numero_vivienda = resultado["numero_vivienda"]?.ToString(),
+                    indicacion_extra = resultado["indicacion_extra"]?.ToString(),
+                };
+
                 return Ok(medico);
             }
             catch (Exception ex)
@@ -1835,6 +1841,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                 return BadRequest(ex);
             }
         }
+
     }
 }
 

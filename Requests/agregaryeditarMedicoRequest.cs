@@ -14,7 +14,7 @@
         public string? segundo_nombre { get; set; }
         public string? primer_apellido { get; set; }
         public string? segundo_apellido { get; set; }
-        public string? DPI { get; set; }
+        public long? identif { get; set; }
         public DateTime? fecha_nacimiento { get; set; }
         public int? telefono { get; set; }
         public string? correo_electronico { get; set; }
