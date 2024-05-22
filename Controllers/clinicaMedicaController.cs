@@ -1581,13 +1581,77 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
-        [HttpPost("catalogos/editar-medico")]
+        //MEDICO Compuesto
+
+        [HttpGet("catalogos/medico-id/{id_medico}")]
+        public IActionResult GetEmpleado(int id_medico)
+        {
+            try
+            {
+                var query = @"SELECT a.id_medico, a.colegiado, a.id_empleado, b.especialidad_id_especialidad, c.id_especialidad, d.id_genero, 
+                     d.id_estado_civil, d.primer_nombre, d.segundo_nombre, d.primer_apellido, d.segundo_apellido, d.identif, d.fecha_nacimiento, d.telefono, 
+                     d.correo_electronico, d.fecha_contratacion, e.id_direccion, e.id_municipio, g.id_departamento, e.calle, e.avenida, e.zona_barrio,
+                     e.residencial_colonia, e.numero_vivienda, e.indicacion_extra
+                 FROM medico a
+                 INNER JOIN medico_especialidad b ON a.id_medico = b.id_medico
+                 INNER JOIN especialidad c ON b.especialidad_id_especialidad = c.id_especialidad
+                 INNER JOIN empleado d ON a.id_empleado = d.id_empleado
+                 INNER JOIN direccion e ON d.id_direccion = e.id_direccion
+                 INNER JOIN municipio f ON e.id_municipio = f.id_municipio
+                 INNER JOIN departamento g ON f.id_departamento = g.id_departamento
+                 WHERE a.id_medico = " + id_medico + "";
+                var resultado = db.ExecuteQuery(query).AsEnumerable().FirstOrDefault();
+
+                if (resultado == null)
+                {
+                    return NotFound();
+                }
+
+                var medico = new agregaryeditarMedicoRequest
+                {
+                    id_medico = Convert.ToInt32(resultado["id_medico"]),
+                    colegiado = Convert.ToInt32(resultado["colegiado"]),
+                    id_empleado = Convert.ToInt32(resultado["id_empleado"]),
+                    especialidad_id_especialidad = Convert.ToInt32(resultado["especialidad_id_especialidad"]),
+                    id_especialidad = Convert.ToInt32(resultado["id_especialidad"]),
+                    id_genero = Convert.ToInt32(resultado["id_genero"]),
+                    id_estado_civil = Convert.ToInt32(resultado["id_estado_civil"]),
+                    primer_nombre = resultado["primer_nombre"]?.ToString(),
+                    segundo_nombre = resultado["segundo_nombre"]?.ToString(),
+                    primer_apellido = resultado["primer_apellido"]?.ToString(),
+                    segundo_apellido = resultado["segundo_apellido"]?.ToString(),
+                    identif = Convert.ToInt64(resultado["identif"]),
+                        fecha_nacimiento = ((DateTime)resultado["fecha_nacimiento"]).Date,
+                    telefono = resultado["telefono"] as int?,
+                    correo_electronico = resultado["correo_electronico"]?.ToString(),
+                    fecha_contratacion = ((DateTime)resultado["fecha_contratacion"]).Date,
+                    id_direccion = Convert.ToInt32(resultado["id_direccion"]),
+                    id_municipio = Convert.ToInt32(resultado["id_municipio"]),
+                    id_departamento = Convert.ToInt32(resultado["id_departamento"]),
+                    calle = resultado["calle"]?.ToString(),
+                    avenida = resultado["avenida"]?.ToString(),
+                    zona_barrio = resultado["zona_barrio"]?.ToString(),
+                    residencial_colonia = resultado["residencial_colonia"]?.ToString(),
+                    numero_vivienda = resultado["numero_vivienda"]?.ToString(),
+                    indicacion_extra = resultado["indicacion_extra"]?.ToString(),
+                };
+
+                return Ok(medico);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+        [HttpPut("catalogos/editar-medico")]
         public IActionResult editarMedico([FromBody] agregaryeditarMedicoRequest medico)
         {
             try
             {
-                var queryInsertar = "START TRANSACTION;" +
-                    $"UPDATE medico SET colegiado = '{medico.colegiado}', " +
+
+                var query = "START TRANSACTION;" +
+                    $"UPDATE medico SET colegiado = '{medico.colegiado}' " +
                     $"WHERE id_medico = '{medico.id_medico}';" +
 
                     $"UPDATE medico SET id_genero = '{medico.id_genero}', " +
@@ -1609,10 +1673,10 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     $"zona_barrio = '{medico.zona_barrio}', " +
                     $"resicencial_colonia = '{medico.residencial_colonia}', " +
                     $"numero_vivienda = '{medico.numero_vivienda}', " +
-                    $"indicacion_extra = '{medico.indicacion_extra}', " +
+                    $"indicacion_extra = '{medico.indicacion_extra}' " +
                     $"WHERE id_direccion = '{medico.id_direccion}';" +
                 $"COMMIT;";
-                db.ExecuteQuery(queryInsertar);
+                db.ExecuteQuery(query);
                 return Ok();
 
             }
@@ -1781,66 +1845,9 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
-        [HttpGet("catalogos/medico-id/{id_medico}")]
-        public IActionResult GetEmpleado(int id_medico)
-        {
-            try
-            {
-                var query = @"SELECT a.id_medico, a.colegiado, a.id_empleado, b.especialidad_id_especialidad, c.id_especialidad, d.id_genero, 
-                     d.id_estado_civil, d.primer_nombre, d.segundo_nombre, d.primer_apellido, d.segundo_apellido, d.identif, d.fecha_nacimiento, d.telefono, 
-                     d.correo_electronico, d.fecha_contratacion, e.id_direccion, e.id_municipio, g.id_departamento, e.calle, e.avenida, e.zona_barrio,
-                     e.residencial_colonia, e.numero_vivienda, e.indicacion_extra
-                 FROM medico a
-                 INNER JOIN medico_especialidad b ON a.id_medico = b.id_medico
-                 INNER JOIN especialidad c ON b.especialidad_id_especialidad = c.id_especialidad
-                 INNER JOIN empleado d ON a.id_empleado = d.id_empleado
-                 INNER JOIN direccion e ON d.id_direccion = e.id_direccion
-                 INNER JOIN municipio f ON e.id_municipio = f.id_municipio
-                 INNER JOIN departamento g ON f.id_departamento = g.id_departamento
-                 WHERE a.id_medico = " + id_medico + "";
-                var resultado = db.ExecuteQuery(query).AsEnumerable().FirstOrDefault();
 
-                if (resultado == null)
-                {
-                    return NotFound();
-                }
+        
 
-                var medico = new agregaryeditarMedicoRequest
-                {
-                    id_medico = Convert.ToInt32(resultado["id_medico"]),
-                    colegiado = Convert.ToInt32(resultado["colegiado"]),
-                    id_empleado = Convert.ToInt32(resultado["id_empleado"]),
-                    especialidad_id_especialidad = Convert.ToInt32(resultado["especialidad_id_especialidad"]),
-                    id_especialidad = Convert.ToInt32(resultado["id_especialidad"]),
-                    id_genero = Convert.ToInt32(resultado["id_genero"]),
-                    id_estado_civil = Convert.ToInt32(resultado["id_estado_civil"]),
-                    primer_nombre = resultado["primer_nombre"]?.ToString(),
-                    segundo_nombre = resultado["segundo_nombre"]?.ToString(),
-                    primer_apellido = resultado["primer_apellido"]?.ToString(),
-                    segundo_apellido = resultado["segundo_apellido"]?.ToString(),
-                    identif = Convert.ToInt64(resultado["identif"]),
-                    fecha_nacimiento = ((DateTime)resultado["fecha_nacimiento"]).Date,
-                    telefono = resultado["telefono"] as int?,
-                    correo_electronico = resultado["correo_electronico"]?.ToString(),
-                    fecha_contratacion = ((DateTime)resultado["fecha_contratacion"]).Date,
-                    id_direccion = Convert.ToInt32(resultado["id_direccion"]),
-                    id_municipio = Convert.ToInt32(resultado["id_municipio"]),
-                    id_departamento = Convert.ToInt32(resultado["id_departamento"]),
-                    calle = resultado["calle"]?.ToString(),
-                    avenida = resultado["avenida"]?.ToString(),
-                    zona_barrio = resultado["zona_barrio"]?.ToString(),
-                    residencial_colonia = resultado["residencial_colonia"]?.ToString(),
-                    numero_vivienda = resultado["numero_vivienda"]?.ToString(),
-                    indicacion_extra = resultado["indicacion_extra"]?.ToString(),
-                };
-
-                return Ok(medico);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
 
     }
 }
