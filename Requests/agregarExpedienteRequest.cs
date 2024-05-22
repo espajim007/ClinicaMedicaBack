@@ -5,7 +5,7 @@
         //Tabla Expediente
         public int? id_expediente { get; set; }
         public int? paciente_id_paciente { get; set; }
-        public DateTime? fecha_creacion { get; set; }
+        public string? fecha_creacion { get; set; }
         //Tabla ficha_Paciente
         public int? aseguradora_id_aseguradora { get; set; }
         public int? id_contacto_emergencia { get; set; }
@@ -19,7 +19,7 @@
         public string? primer_apellido { get; set; }
         public string? segundo_apellido { get; set; }
         public string? DPI { get; set; }
-        public DateTime? fecha_nacimiento { get; set; }
+        public string? fecha_nacimiento { get; set; }
         public int? telefono { get; set; }
         public string? correo_electronico { get; set; }
         public string? NIT { get; set; }

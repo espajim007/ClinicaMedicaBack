@@ -7,6 +7,7 @@
         public int? colegiado { get; set; }
         public int? id_empleado { get; set; }
         public int? especialidad_id_especialidad { get; set; } // para intermedia catalogo medico
+        public int? id_medico_especialidad { get; set; }
         public int? id_especialidad { get; set; }
         public int? id_genero { get; set; }
         public int? id_estado_civil { get; set; }
@@ -15,10 +16,10 @@
         public string? primer_apellido { get; set; }
         public string? segundo_apellido { get; set; }
         public long? identif { get; set; }
-        public DateTime? fecha_nacimiento { get; set; }
+        public string? fecha_nacimiento { get; set; }
         public int? telefono { get; set; }
         public string? correo_electronico { get; set; }
-        public DateTime? fecha_contratacion { get; set; }
+        public string? fecha_contratacion { get; set; }
         public int? id_direccion { get; set; }
         public int? id_departamento { get; set; }
         public int? id_municipio { get; set; }
