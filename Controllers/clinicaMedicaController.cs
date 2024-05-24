@@ -227,18 +227,22 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                var query = @"SELECT id_cita, expediente_id_expediente, medico_id_medico, id_estado_cita, fecha, hora
-                     FROM cita 
-                     ORDER BY id_cita";
+                var query = @"SELECT a.id_cita, a.expediente_id_expediente, a.medico_id_medico, a.id_estado_cita, 
+                 DATE_FORMAT(a.fecha, '%Y-%m-%d') AS fecha, TIME_FORMAT(a.hora, '%H:%i:%s') AS hora,
+                 b.id_empleado
+                 FROM cita a
+                 JOIN medico b ON a.medico_id_medico = b.id_medico
+                 ORDER BY a.fecha ASC, a.hora ASC";
                 var resultado = db.ExecuteQuery(query);
                 var citas = resultado.AsEnumerable().Select(row => new citaModel
                 {
                     id_cita = Convert.ToInt32(row["id_cita"]),
-                    expediente_id_expediente = Convert.ToInt32(row["expediente_id_expediente"]),
+                    expediente_id_expediente = row["expediente_id_expediente"] != DBNull.Value ? Convert.ToInt32(row["expediente_id_expediente"]) : 0,
                     medico_id_medico = Convert.ToInt32(row["medico_id_medico"]),
                     id_estado_cita = Convert.ToInt32(row["id_estado_cita"]),
-                    fecha = ((DateTime)row["fecha"]).Date,
-                    hora = TimeSpan.Parse(row["hora"].ToString())
+                    fecha = row["fecha"].ToString(),
+                    hora = row["hora"].ToString(),
+                    id_empleado = Convert.ToInt32(row["id_empleado"])
                 }).ToList();
                 return Ok(citas);
             }
@@ -253,8 +257,8 @@ namespace AnalisisIClinicaMedicaBack.Controllers
         {
             try
             {
-                var queryActualizar = $"UPDATE cita SET expediente_id_expediente = '{cita.expediente_id_expediente}', medico_id_medico = '{cita.medico_id_medico}'" +
-                    $", id_estado_cita = '{cita.id_estado_cita}'" +
+                var queryActualizar = $"UPDATE cita SET expediente_id_expediente = '{cita.expediente_id_expediente}', " +
+                    $" id_estado_cita = '{cita.id_estado_cita}'" +
                 $" WHERE id_cita = {cita.id_cita}";
                 var actualizar = db.ExecuteQuery(queryActualizar);
 
