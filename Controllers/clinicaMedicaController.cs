@@ -1623,7 +1623,7 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     segundo_apellido = resultado["segundo_apellido"]?.ToString(),
                     identif = Convert.ToInt64(resultado["identif"]),
                     fecha_nacimiento = resultado["fecha_nacimiento"]?.ToString(),
-                    telefono = resultado["telefono"] as int?,
+                    telefono = Convert.ToInt32(resultado["telefono"]),
                     correo_electronico = resultado["correo_electronico"]?.ToString(),
                     fecha_contratacion = resultado["fecha_contratacion"]?.ToString(),
                     id_direccion = Convert.ToInt32(resultado["id_direccion"]),
@@ -1704,37 +1704,30 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
-                    var queryInsertar = //$"START TRANSACTION; " +
-                        $"SET @idDireccion = NULL;" +
-                        $"SET @idEmpleado = NULL; " +
-                        $"SET @idMedico = NULL; " +
+                    var queryInsertar = $"CALL nuevo_medico(" +
+                        $"'{medico.id_municipio}', " +
+                        $"'{medico.calle}', " +
+                        $"'{medico.avenida}', " +
+                        $"'{medico.zona_barrio}', " +
+                        $"'{medico.residencial_colonia}', " +
+                        $"'{medico.numero_vivienda}', " +
+                        $"'{medico.indicacion_extra}', " +
 
-                        $"INSERT INTO direccion (id_municipio, calle, avenida, zona_barrio, residencial_colonia, numero_vivienda," +
-                        $" indicacion_extra) VALUES " +
-                        $" ('{medico.id_municipio}', '{medico.calle}', '{medico.avenida}', " +
-                        $"'{medico.zona_barrio}', '{medico.residencial_colonia}', '{medico.numero_vivienda}', " +
-                        $"'{medico.indicacion_extra}');" +
-
-                        $"SELECT @idDireccion = MAX(id_direccion) FROM direccion;" +
-
-                        $"INSERT INTO empleado ( id_direccion, id_genero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido," +
-                        $" segundo_apellido, identif, fecha_nacimiento, telefono, correo_electronico, fecha_contratacion) " +
-                        $"VALUES ( @idDireccion, '{medico.id_genero}', '{medico.id_estado_civil}', '{medico.primer_nombre}', " +
+                        $"'{medico.id_genero}', " +
+                        $"'{medico.id_estado_civil}', " +
+                        $"'{medico.primer_nombre}', " +
                         $"'{medico.segundo_nombre}', " +
-                        $"'{medico.primer_apellido}', '{medico.segundo_apellido}', '{medico.identif}', '{medico.fecha_nacimiento}', " +
-                        $"'{medico.telefono}', '{medico.correo_electronico}', '{medico.fecha_contratacion}');" +
+                        $"'{medico.primer_apellido}', " +
+                        $"'{medico.segundo_apellido}', " +
+                        $"'{medico.identif}', " +
+                        $"'{medico.fecha_nacimiento}', " +
+                        $"'{medico.telefono}', " +
+                        $"'{medico.correo_electronico}', " +
+                        $"'{medico.fecha_contratacion}', " +
 
-                        $"SELECT @idEmpleado = MAX(id_empleado) FROM empleado;" +
-
-                        $"INSERT INTO medico (colegiado, id_empleado) VALUES " +
-                        $" ('{medico.colegiado}', @idEmpleado);" +
-
-                        $"SELECT @idMedico = MAX(id_medico) FROM medico;" +
-
-                        $"INSERT INTO medico_especialidad (id_medico, especialidad_id_especialidad) VALUES " +
-                        $" (@idMedico,'{medico.especialidad_id_especialidad}');";
-
-                       // $"COMMIT;";
+                        $"'{medico.colegiado}', " +
+                        $"'{medico.id_especialidad}' " +
+                        $");";
                     db.ExecuteQuery(queryInsertar);
                     return Ok();
                 }
@@ -1756,19 +1749,19 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
         //---------------------------------------fichaPaciente
         [HttpGet("catalogos/ficha-paciente")]
-        public IActionResult GetFichaPaciente(int idUsuario)
+        public IActionResult GetFichaPaciente()
         {
             try
             {
                 var query = @"SELECT id_ficha_paciente, aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion,
                 id_tipo_sangre, id_ocupacion, genero_idgenero, id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, 
-                segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones
+                segundo_apellido, identif, fecha_nacimiento, telefono, correo_electronico, nit_fac, observaciones
                      FROM ficha_paciente 
                      ORDER BY id_ficha_paciente";
                 var resultado = db.ExecuteQuery(query);
-                var fichas = resultado.AsEnumerable().Select(row => new agregarExpedienteRequest
+                var fichas = resultado.AsEnumerable().Select(row => new fichaPacienteModel
                 {
-                    paciente_id_paciente = Convert.ToInt32(row["id_ficha_paciente"]),
+                    id_ficha_paciente = Convert.ToInt32(row["id_ficha_paciente"]),
                     aseguradora_id_aseguradora = Convert.ToInt32(row["aseguradora_id_aseguradora"]),
                     id_contacto_emergencia = Convert.ToInt32(row["id_contacto_emergencia"]),
                     id_direccion = Convert.ToInt32(row["id_direccion"]),
@@ -1780,11 +1773,10 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     segundo_nombre = row["segundo_nombre"].ToString(),
                     primer_apellido = row["primer_apellido"].ToString(),
                     segundo_apellido = row["segundo_apellido"].ToString(),
-                    DPI = row["DPI"].ToString(),
-                    fecha_nacimiento = row["fecha_nacimiento"].ToString(),
+                    identif = Convert.ToInt64(row["identif"]),
                     telefono = Convert.ToInt32(row["telefono"]),
                     correo_electronico = row["correo_electronico"].ToString(),
-                    NIT = row["NIT"].ToString(),
+                    nit_fac = row["nit_fac"].ToString(),
                     observaciones = row["observaciones"].ToString()
                 }).ToList();
                 return Ok(fichas);
@@ -1795,20 +1787,101 @@ namespace AnalisisIClinicaMedicaBack.Controllers
             }
         }
 
-
-
-
-        [HttpPost("catalogos/editar-ficha-paciente")]
-        public IActionResult EditarFichaPaciente([FromBody] fichaPacienteModel fichaPaciente)
+        [HttpGet("catalogos/ficha-paciente-id/{id_paciente}")]
+        public IActionResult GetFichaPacienteId(int id_paciente)
         {
             try
             {
-                var queryActualizar = $"UPDATE ficha_paciente SET aseguradora_id_aseguradora = '{fichaPaciente.aseguradora_id_aseguradora}', id_contacto_emergencia = '{fichaPaciente.id_contacto_emergencia}', " +
-                $" id_direccion = '{fichaPaciente.id_direccion}', id_tipo_sangre = '{fichaPaciente.id_tipo_sangre}', id_ocupacion = '{fichaPaciente.id_ocupacion}', genero_idgenero = '{fichaPaciente.genero_idgenero}'," +
-                $" id_estado_civil = '{fichaPaciente.id_estado_civil}', primer_nombre = '{fichaPaciente.primer_nombre}', segundo_nombre = '{fichaPaciente.segundo_nombre}'," +
-                $" primer_apellido = '{fichaPaciente.primer_apellido}', segundo_apellido = '{fichaPaciente.segundo_apellido}', DPI = '{fichaPaciente.DPI}', fecha_nacimiento = '{fichaPaciente.fecha_nacimiento}', " +
-                $" telefono = '{fichaPaciente.telefono}', correo_electronico = '{fichaPaciente.correo_electronico}', NIT = '{fichaPaciente.NIT}', observaciones = '{fichaPaciente.observaciones}'" +
-                $" WHERE id_ficha_paciente = {fichaPaciente.id_ficha_paciente}";
+                var query = @"SELECT 
+                              a.id_expediente, a.paciente_id_paciente, b.aseguradora_id_aseguradora, b.id_contacto_emergencia, b.id_direccion, 
+                              b.id_tipo_sangre, b.id_ocupacion, b.genero_idgenero, b.id_estado_civil, b.primer_nombre, b.segundo_nombre, b.primer_apellido, 
+                              b.segundo_apellido, b.identif,DATE_FORMAT(b.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, b.telefono, b.correo_electronico, 
+                              b.nit_fac, b.observaciones,
+                              d.id_municipio, d.calle, d.avenida, d.zona_barrio, d.residencial_colonia, d.numero_vivienda, d.indicacion_extra,
+                              c.id_relacion_paciente, c.id_genero AS genero_contacto, c.primer_nombre AS primer_nombre_contacoe, 
+                              c.segundo_nombre AS segundo_nombre_contactoe, c.primer_apellido AS primer_apellido_contactoe, 
+                              c.segundo_apellido AS segundo_apellido_contactoe, c.telefono AS telefono_contactoe
+                            FROM expediente a
+                            JOIN ficha_paciente b ON a.paciente_id_paciente = b.id_ficha_paciente
+                            JOIN contacto_emergencia c ON b.id_contacto_emergencia = c.id_contacto_emergencia
+                            JOIN direccion d ON b.id_direccion = d.id_direccion " +
+                            $" WHERE a.paciente_id_paciente = {id_paciente}";
+                var resultado = db.ExecuteQuery(query).AsEnumerable().FirstOrDefault();
+
+                var paciente =  new editarFichapacienteRequest
+                {
+
+                    id_expediente = Convert.ToInt32(resultado["id_expediente"]),
+                    paciente_id_paciente = Convert.ToInt32(resultado["paciente_id_paciente"]),
+                    aseguradora_id_aseguradora = Convert.ToInt32(resultado["aseguradora_id_aseguradora"]),
+                    id_contacto_emergencia = Convert.ToInt32(resultado["id_contacto_emergencia"]),
+                    id_direccion = Convert.ToInt32(resultado["id_direccion"]),
+                    id_tipo_sangre = Convert.ToInt32(resultado["id_tipo_sangre"]),
+                    id_ocupacion = Convert.ToInt32(resultado["id_ocupacion"]),
+                    genero_idgenero = Convert.ToInt32(resultado["genero_idgenero"]),
+                    id_estado_civil = Convert.ToInt32(resultado["id_estado_civil"]),
+                    primer_nombre = resultado["primer_nombre"].ToString(),
+                    segundo_nombre = resultado["segundo_nombre"].ToString(),
+                    primer_apellido = resultado["primer_apellido"].ToString(),
+                    segundo_apellido = resultado["segundo_apellido"].ToString(),
+                    identif = Convert.ToInt32(resultado["identif"]),
+                    fecha_nacimiento = resultado["fecha_nacimiento"].ToString(),
+                    telefono = Convert.ToInt32(resultado["telefono"]),
+                    correo_electronico = resultado["correo_electronico"].ToString(),
+                    nit_fac = resultado["nit_fac"].ToString(),
+                    observaciones = resultado["observaciones"].ToString(),
+                    id_municipio = Convert.ToInt32(resultado["id_municipio"]),
+                    calle = resultado["calle"]?.ToString(),
+                    avenida = resultado["avenida"]?.ToString(),
+                    zona_barrio = resultado["zona_barrio"]?.ToString(),
+                    residencial_colonia = resultado["residencial_colonia"]?.ToString(),
+                    numero_vivienda = resultado["numero_vivienda"]?.ToString(),
+                    indicacion_extra = resultado["indicacion_extra"]?.ToString(),
+                    id_relacion_paciente = Convert.ToInt32(resultado["id_relacion_paciente"]),
+                    genero_contacto = Convert.ToInt32(resultado["genero_contacto"]),
+                    primer_nombre_contacoe = resultado["primer_nombre_contacoe"].ToString(),
+                    segundo_nombre_contactoe = resultado["segundo_nombre_contactoe"].ToString(),
+                    primer_apellido_contactoe = resultado["primer_apellido_contactoe"].ToString(),
+                    segundo_apellido_contactoe = resultado["segundo_apellido_contactoe"].ToString(),
+                    telefono_contactoe = Convert.ToInt32(resultado["telefono_contactoe"])
+                };
+                return Ok(paciente);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
+
+        [HttpPut("catalogos/editar-ficha-paciente")]
+        public IActionResult EditarFichaPaciente([FromBody] editarFichapacienteRequest paciente)
+        {
+            try
+            {
+                var queryActualizar = $@"START TRANSACTION;
+                                        UPDATE ficha_paciente SET aseguradora_id_aseguradora = '{paciente.aseguradora_id_aseguradora}', id_tipo_sangre = '{paciente.id_tipo_sangre}',
+                                        id_ocupacion = '{paciente.id_ocupacion}', genero_idgenero = '{paciente.genero_idgenero}',
+                                        id_estado_civil = '{paciente.id_estado_civil}', primer_nombre = '{paciente.primer_nombre}',
+                                        segundo_nombre = '{paciente.segundo_nombre}', primer_apellido = '{paciente.primer_apellido}',
+                                        segundo_apellido = '{paciente.segundo_apellido}', fecha_nacimiento = '{paciente.fecha_nacimiento}',
+                                        telefono = '{paciente.telefono}', correo_electronico = '{paciente.correo_electronico}',
+                                        nit_fac = '{paciente.nit_fac}', observaciones = '{paciente.observaciones}'
+                                        WHERE id_ficha_paciente  = '{paciente.paciente_id_paciente}';
+                                        
+                                        UPDATE direccion SET id_municipio = '{paciente.id_municipio}', calle = '{paciente.calle}',
+                                        avenida = '{paciente.avenida}', zona_barrio = '{paciente.zona_barrio}',
+                                        residencial_colonia = '{paciente.residencial_colonia}', numero_vivienda = '{paciente.numero_vivienda}',
+                                        indicacion_extra = '{paciente.indicacion_extra}'
+                                        WHERE id_direccion  = '{paciente.id_direccion}';
+                                        
+                                        UPDATE contacto_emergencia SET id_relacion_paciente = '{paciente.id_relacion_paciente}', id_genero = '{paciente.genero_contacto}',
+                                        primer_nombre = '{paciente.primer_nombre_contacoe}', segundo_nombre = '{paciente.segundo_nombre_contactoe}',
+                                        primer_apellido = '{paciente.primer_apellido_contactoe}', segundo_apellido = '{paciente.segundo_apellido_contactoe}',
+                                        telefono = '{paciente.telefono_contactoe}'
+                                        WHERE id_contacto_emergencia  = '{paciente.id_contacto_emergencia}';
+                                        COMMIT;";
                 var actualizar = db.ExecuteQuery(queryActualizar);
 
                 return Ok();
@@ -1822,23 +1895,50 @@ namespace AnalisisIClinicaMedicaBack.Controllers
 
         }
 
-        [HttpPost("catalogos/nueva-ficha-paciente")]
-        public IActionResult NuevaFichaPaciente([FromBody] fichaPacienteModel ficha)
+        [HttpPut("catalogos/nueva-ficha-paciente")]
+        public IActionResult NuevaFichaPaciente([FromBody] editarFichapacienteRequest ficha)
         {
             try
             {
                 // Verificar si el usuario ya existe en la base de datos
-                var queryValidador = $"SELECT DPI FROM ficha_paciente WHERE DPI = '{ficha.DPI}'";
+                var queryValidador = $"SELECT identif FROM ficha_paciente WHERE identif = '{ficha.identif}'";
                 var resultadoValidador = db.ExecuteQuery(queryValidador);
 
                 if (resultadoValidador.Rows.Count == 0) // si no coincide con nada, el usuario no existe y por eso en la ejecucion del query devuelve 0 filas
                 {
-                    var queryInsertar = $"INSERT INTO ficha_paciente ( aseguradora_id_aseguradora, id_contacto_emergencia, id_direccion, id_tipo_sangre, id_ocupacion, genero_idgenero, " +
-                        $"id_estado_civil, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, DPI, fecha_nacimiento, telefono, correo_electronico, NIT, observaciones) " +
-                        $"VALUES ( '{ficha.aseguradora_id_aseguradora}', '{ficha.id_contacto_emergencia}', '{ficha.id_direccion}', '{ficha.id_tipo_sangre}', '{ficha.id_ocupacion}', " +
-                        $"'{ficha.genero_idgenero}', '{ficha.id_estado_civil}'" +
-                        $", '{ficha.primer_nombre}', '{ficha.segundo_nombre}', '{ficha.primer_apellido}', '{ficha.segundo_apellido}', '{ficha.DPI}', '{ficha.fecha_nacimiento}'," +
-                        $", '{ficha.telefono}', '{ficha.correo_electronico}', '{ficha.NIT}', '{ficha.observaciones}')";
+                    var queryInsertar = $"CALL nuevo_paciente(" +
+                        $"'{ficha.id_municipio}', " +
+                        $"'{ficha.calle}', " +
+                        $"'{ficha.avenida}', " +
+                        $"'{ficha.zona_barrio}', " +
+                        $"'{ficha.residencial_colonia}', " +
+                        $"'{ficha.numero_vivienda}', " +
+                        $"'{ficha.indicacion_extra}', " +
+
+                        $"'{ficha.id_relacion_paciente}', " +
+                        $"'{ficha.genero_contacto}', " +
+                        $"'{ficha.primer_nombre_contacoe}', " +
+                        $"'{ficha.segundo_nombre_contactoe}', " +
+                        $"'{ficha.primer_apellido_contactoe}', " +
+                        $"'{ficha.segundo_apellido_contactoe}', " +
+                        $"'{ficha.telefono_contactoe}', " +
+
+                        $"'{ficha.aseguradora_id_aseguradora}', " +
+                        $"'{ficha.id_tipo_sangre}', " +
+                        $"'{ficha.id_ocupacion}', " +
+                        $"'{ficha.genero_idgenero}', " +
+                        $"'{ficha.id_estado_civil}', " +
+                        $"'{ficha.primer_nombre_contacoe}', " +
+                        $"'{ficha.segundo_nombre_contactoe}', " +
+                        $"'{ficha.primer_apellido_contactoe}', " +
+                        $"'{ficha.segundo_apellido_contactoe}', " +
+                        $"'{ficha.identif}', " +
+                        $"'{ficha.fecha_nacimiento}', " +
+                        $"'{ficha.telefono}', " +
+                        $"'{ficha.correo_electronico}', " +
+                        $"'{ficha.nit_fac}', " +
+                        $"'{ficha.observaciones}' " +
+                        $");";
                     db.ExecuteQuery(queryInsertar);
                     return Ok();
                 }
@@ -1847,7 +1947,6 @@ namespace AnalisisIClinicaMedicaBack.Controllers
                     // El usuario ya existe, devolver un BadRequest
                     return BadRequest("Ya esta registrado ese paciente");
                 }
-
             }
             catch (Exception ex)
             {
